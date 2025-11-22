@@ -69,11 +69,7 @@ export const Confirmation = ({
   state,
   ...props
 }: ConfirmationProps) => {
-  if (
-    !approval ||
-    (state as any) === "input-streaming" ||
-    (state as any) === "input-available"
-  ) {
+  if (!approval || state === "input-streaming" || state === "input-available") {
     return null;
   }
 
@@ -101,7 +97,7 @@ export const ConfirmationRequest = ({ children }: ConfirmationRequestProps) => {
   const { state } = useConfirmation();
 
   // Only show when approval is requested
-  if ((state as any) !== "approval-requested") {
+  if ((state as string) !== "approval-requested") {
     return null;
   }
 
@@ -120,9 +116,9 @@ export const ConfirmationAccepted = ({
   // Only show when approved and in response states
   if (
     !approval?.approved ||
-    ((state as any) !== "approval-responded" &&
-      (state as any) !== "output-denied" &&
-      (state as any) !== "output-available")
+    ((state as string) !== "approval-responded" &&
+      (state as string) !== "output-denied" &&
+      state !== "output-available")
   ) {
     return null;
   }
@@ -142,9 +138,9 @@ export const ConfirmationRejected = ({
   // Only show when rejected and in response states
   if (
     approval?.approved !== false ||
-    ((state as any) !== "approval-responded" &&
-      (state as any) !== "output-denied" &&
-      (state as any) !== "output-available")
+    ((state as string) !== "approval-responded" &&
+      (state as string) !== "output-denied" &&
+      state !== "output-available")
   ) {
     return null;
   }
@@ -161,7 +157,7 @@ export const ConfirmationActions = ({
   const { state } = useConfirmation();
 
   // Only show when approval is requested
-  if ((state as any) !== "approval-requested") {
+  if ((state as string) !== "approval-requested") {
     return null;
   }
 

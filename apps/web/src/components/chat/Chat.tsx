@@ -38,6 +38,7 @@ import {
 } from "@/components/ai-elements/sources";
 import { Loader } from "@/components/ai-elements/loader";
 import { useResumeStore } from "@/store/useResumeStore";
+import { Shimmer } from "../ai-elements/shimmer";
 
 const Chat = () => {
   const [input, setInput] = useState("");
@@ -59,9 +60,6 @@ const Chat = () => {
     if (!(hasText || hasAttachments)) {
       return;
     }
-    console.log("📤 Sending message with current resume state:", resumeData);
-    // Type assertion needed as TypeScript types don't reflect the second parameter correctly
-    // See: https://sdk.vercel.ai/docs/ai-sdk-ui/chatbot#setting-custom-body-fields-per-request
     (sendMessage as any)(
       {
         text: message.text || "Sent with attachments",
@@ -156,13 +154,15 @@ const Chat = () => {
                 })}
               </div>
             ))}
-            {status === "submitted" && <Loader className="items-start" />}
+            {status === "submitted" && (
+              <Shimmer duration={4}>Generating</Shimmer>
+            )}
           </ConversationContent>
           <ConversationScrollButton />
         </Conversation>
         <PromptInput
           onSubmit={handleSubmit}
-          className="mt-4"
+          className="mt-4 border-2"
           globalDrop
           multiple
         >
@@ -173,6 +173,7 @@ const Chat = () => {
           </PromptInputHeader>
           <PromptInputBody>
             <PromptInputTextarea
+              placeholder="Lets build your resume!"
               onChange={(e) => setInput(e.target.value)}
               value={input}
             />

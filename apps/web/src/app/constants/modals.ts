@@ -4,4 +4,4 @@ const openrouter = createOpenRouter({
   apiKey: process.env.OPENROUTERKEY,
 });
 
-export const chatModel = openrouter.chat("x-ai/grok-4.1-fast");
+export const chatModel = openrouter.chat(process.env.MODAL_NAME as string);

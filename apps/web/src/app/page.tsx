@@ -1,30 +1,28 @@
-"use client";
+import { Features } from "@/components/components/Features";
+import { Footer } from "@/components/components/Footer";
+import { Hero } from "@/components/components/Hero";
+import { HowItWorks } from "@/components/components/HowItWorks";
+import { Navbar } from "@/components/components/Navbar";
+import { Pricing } from "@/components/components/Pricing";
 
-const TITLE_TEXT = `
- ██████╗ ███████╗████████╗████████╗███████╗██████╗
- ██╔══██╗██╔════╝╚══██╔══╝╚══██╔══╝██╔════╝██╔══██╗
- ██████╔╝█████╗     ██║      ██║   █████╗  ██████╔╝
- ██╔══██╗██╔══╝     ██║      ██║   ██╔══╝  ██╔══██╗
- ██████╔╝███████╗   ██║      ██║   ███████╗██║  ██║
- ╚═════╝ ╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝
+const App: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-background text-white font-sans">
+      {/* Grid Background Layer */}
+      <div className="fixed inset-0 bg-grid-pattern bg-grid-sm opacity-[0.03] pointer-events-none z-0"></div>
 
- ████████╗    ███████╗████████╗ █████╗  ██████╗██╗  ██╗
- ╚══██╔══╝    ██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
-    ██║       ███████╗   ██║   ███████║██║     █████╔╝
-    ██║       ╚════██║   ██║   ██╔══██║██║     ██╔═██╗
-    ██║       ███████║   ██║   ██║  ██║╚██████╗██║  ██╗
-    ╚═╝       ╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
- `;
+      <div className="relative z-10 flex flex-col">
+        <Navbar />
+        <main className="flex-grow">
+          <Hero />
+          <Features />
+          <HowItWorks />
+          <Pricing />
+        </main>
+        <Footer />
+      </div>
+    </div>
+  );
+};
 
-export default function Home() {
-	return (
-		<div className="container mx-auto max-w-3xl px-4 py-2">
-			<pre className="overflow-x-auto font-mono text-sm">{TITLE_TEXT}</pre>
-			<div className="grid gap-6">
-				<section className="rounded-lg border p-4">
-					<h2 className="mb-2 font-medium">API Status</h2>
-				</section>
-			</div>
-		</div>
-	);
-}
+export default App;
