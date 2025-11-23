@@ -119,7 +119,9 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
                   <p className="font-bold">{edu.institution}</p>
                   <p className="text-sm italic">{edu.degree}</p>
                 </div>
-                <p className="text-sm">{edu.startDate} - {edu.endDate}</p>
+                <p className="text-sm">
+                  {edu.startDate} - {edu.endDate}
+                </p>
               </div>
               {edu.grade && <p className="text-sm mt-1">GPA: {edu.grade}</p>}
             </div>
@@ -336,7 +338,9 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
                   <h4 className="font-bold text-gray-900">{edu.institution}</h4>
                   <div className="text-sm text-gray-600">
                     <div>{edu.degree}</div>
-                    <div>{edu.startDate} - {edu.endDate}</div>
+                    <div>
+                      {edu.startDate} - {edu.endDate}
+                    </div>
                     {edu.grade && <div>GPA: {edu.grade}</div>}
                   </div>
                 </div>
@@ -354,10 +358,15 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
               {data.projects.map((project, index) => (
                 <div key={index}>
                   <h4 className="font-bold text-gray-900">{project.name}</h4>
-                  <p className="text-sm text-gray-700 mb-2">{project.description}</p>
+                  <p className="text-sm text-gray-700 mb-2">
+                    {project.description}
+                  </p>
                   <div className="flex flex-wrap gap-2 text-sm">
                     {project.tech.map((tech, i) => (
-                      <span key={i} className="bg-gray-100 px-2 py-1 rounded text-xs text-gray-600">
+                      <span
+                        key={i}
+                        className="bg-gray-100 px-2 py-1 rounded text-xs text-gray-600"
+                      >
                         {tech}
                       </span>
                     ))}
@@ -471,7 +480,11 @@ export const MinimalTemplate = ({ data }: { data: ResumeType }) => {
                   <div>
                     <h4 className="font-bold text-[#2c3e50]">{edu.degree}</h4>
                     <div className="text-sm text-[#555]">{edu.institution}</div>
-                    {edu.grade && <div className="text-sm text-[#555]">GPA: {edu.grade}</div>}
+                    {edu.grade && (
+                      <div className="text-sm text-[#555]">
+                        GPA: {edu.grade}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -487,8 +500,12 @@ export const MinimalTemplate = ({ data }: { data: ResumeType }) => {
             <div className="space-y-6">
               {data.projects.map((project, index) => (
                 <div key={index}>
-                  <h4 className="font-bold text-lg text-[#2c3e50]">{project.name}</h4>
-                  <p className="text-sm text-[#444] mb-2">{project.description}</p>
+                  <h4 className="font-bold text-lg text-[#2c3e50]">
+                    {project.name}
+                  </h4>
+                  <p className="text-sm text-[#444] mb-2">
+                    {project.description}
+                  </p>
                   <div className="flex flex-wrap gap-2 text-sm text-[#555]">
                     <span className="font-semibold">Tech:</span>
                     {project.tech.join(", ")}
