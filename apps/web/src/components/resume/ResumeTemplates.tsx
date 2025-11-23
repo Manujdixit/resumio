@@ -1,6 +1,8 @@
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
 
 export const ModernTemplate = ({ data }: { data: ResumeType }) => {
+  console.log({ data });
+
   return (
     <div
       className="resume-paper relative max-w-[210mm] min-h-[297mm] mx-auto bg-white text-black p-12 shadow-lg"
@@ -14,7 +16,7 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
       </div>
 
       {/* Page Break Indicators */}
-      {[1, 2, 3].map((page) => (
+      {/* {[1, 2, 3].map((page) => (
         <div
           key={page}
           className="absolute left-0 right-0 flex flex-col items-center justify-center pointer-events-none no-print"
@@ -24,13 +26,13 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
             transform: "translateY(-50%)",
           }}
         >
-          {/* Visual Gap */}
+        
           <div className="w-full h-[2px] bg-gray-300 border-dashed border-gray-400" />
           <div className="bg-gray-100 px-2 text-xs text-gray-500 font-sans -mt-2">
             End of Page {page} • Start of Page {page + 1}
           </div>
         </div>
-      ))}
+      ))} */}
 
       {/* Header with Name and Contact */}
       {data.personalInfo && (
@@ -41,14 +43,17 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
           <div className="flex items-center justify-center gap-3 text-sm">
             {data.personalInfo.email && (
               <>
-                <span>✉</span>
                 <span>{data.personalInfo.email}</span>
               </>
             )}
             {data.personalInfo.phone && (
               <>
-                <span>📞</span>
                 <span>{data.personalInfo.phone}</span>
+              </>
+            )}
+            {data.personalInfo.address && (
+              <>
+                <span>{data.personalInfo.address}</span>
               </>
             )}
           </div>
@@ -114,7 +119,7 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
                   <p className="font-bold">{edu.institution}</p>
                   <p className="text-sm italic">{edu.degree}</p>
                 </div>
-                <p className="text-sm">{edu.endDate}</p>
+                <p className="text-sm">{edu.startDate} - {edu.endDate}</p>
               </div>
               {edu.grade && <p className="text-sm mt-1">GPA: {edu.grade}</p>}
             </div>
@@ -220,19 +225,16 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
         <div className="space-y-4 text-sm">
           {data.personalInfo?.email && (
             <div className="flex items-center gap-2">
-              <span>✉</span>
               <span className="break-all">{data.personalInfo.email}</span>
             </div>
           )}
           {data.personalInfo?.phone && (
             <div className="flex items-center gap-2">
-              <span>📞</span>
               <span>{data.personalInfo.phone}</span>
             </div>
           )}
           {data.personalInfo?.address && (
             <div className="flex items-center gap-2">
-              <span>📍</span>
               <span>{data.personalInfo.address}</span>
             </div>
           )}
@@ -244,6 +246,27 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
                 className="hover:underline break-all"
               >
                 LinkedIn
+              </a>
+            </div>
+          )}
+          {data.personalInfo?.github && (
+            <div className="flex items-center gap-2">
+              <span>gh</span>
+              <a
+                href={data.personalInfo.github}
+                className="hover:underline break-all"
+              >
+                GitHub
+              </a>
+            </div>
+          )}
+          {data.personalInfo?.portfolio && (
+            <div className="flex items-center gap-2">
+              <a
+                href={data.personalInfo.portfolio}
+                className="hover:underline break-all"
+              >
+                Portfolio
               </a>
             </div>
           )}
@@ -268,7 +291,7 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
         {data.summary && (
           <div className="mb-8">
             <h3 className="text-lg font-bold uppercase tracking-wider border-b-2 border-gray-200 pb-2 mb-4 flex items-center gap-2">
-              <span>👤</span> Profile
+              Profile
             </h3>
             <p className="text-sm leading-relaxed text-gray-700">
               {data.summary}
@@ -279,7 +302,7 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
         {data.experience && data.experience.length > 0 && (
           <div className="mb-8">
             <h3 className="text-lg font-bold uppercase tracking-wider border-b-2 border-gray-200 pb-2 mb-4 flex items-center gap-2">
-              <span>💼</span> Professional Experience
+              Professional Experience
             </h3>
             <div className="space-y-6">
               {data.experience.map((exp, index) => (
@@ -305,7 +328,7 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
         {data.education && data.education.length > 0 && (
           <div className="mb-8">
             <h3 className="text-lg font-bold uppercase tracking-wider border-b-2 border-gray-200 pb-2 mb-4 flex items-center gap-2">
-              <span>🎓</span> Education
+              Education
             </h3>
             <div className="space-y-4">
               {data.education.map((edu, index) => (
@@ -313,7 +336,31 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
                   <h4 className="font-bold text-gray-900">{edu.institution}</h4>
                   <div className="text-sm text-gray-600">
                     <div>{edu.degree}</div>
-                    <div>{edu.endDate}</div>
+                    <div>{edu.startDate} - {edu.endDate}</div>
+                    {edu.grade && <div>GPA: {edu.grade}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {data.projects && data.projects.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-lg font-bold uppercase tracking-wider border-b-2 border-gray-200 pb-2 mb-4 flex items-center gap-2">
+              Projects
+            </h3>
+            <div className="space-y-6">
+              {data.projects.map((project, index) => (
+                <div key={index}>
+                  <h4 className="font-bold text-gray-900">{project.name}</h4>
+                  <p className="text-sm text-gray-700 mb-2">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 text-sm">
+                    {project.tech.map((tech, i) => (
+                      <span key={i} className="bg-gray-100 px-2 py-1 rounded text-xs text-gray-600">
+                        {tech}
+                      </span>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -352,6 +399,11 @@ export const MinimalTemplate = ({ data }: { data: ResumeType }) => {
           {data.personalInfo?.github && (
             <a href={data.personalInfo.github} className="hover:underline">
               GitHub
+            </a>
+          )}
+          {data.personalInfo?.portfolio && (
+            <a href={data.personalInfo.portfolio} className="hover:underline">
+              Portfolio
             </a>
           )}
         </div>
@@ -419,6 +471,27 @@ export const MinimalTemplate = ({ data }: { data: ResumeType }) => {
                   <div>
                     <h4 className="font-bold text-[#2c3e50]">{edu.degree}</h4>
                     <div className="text-sm text-[#555]">{edu.institution}</div>
+                    {edu.grade && <div className="text-sm text-[#555]">GPA: {edu.grade}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {data.projects && data.projects.length > 0 && (
+          <section>
+            <h3 className="text-center text-lg font-bold uppercase tracking-widest text-[#4a4a4a] border-b border-[#ddd] pb-2 mb-4 bg-[#e8e8e8] py-1">
+              Projects
+            </h3>
+            <div className="space-y-6">
+              {data.projects.map((project, index) => (
+                <div key={index}>
+                  <h4 className="font-bold text-lg text-[#2c3e50]">{project.name}</h4>
+                  <p className="text-sm text-[#444] mb-2">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 text-sm text-[#555]">
+                    <span className="font-semibold">Tech:</span>
+                    {project.tech.join(", ")}
                   </div>
                 </div>
               ))}

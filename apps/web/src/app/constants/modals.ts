@@ -5,3 +5,5 @@ const openrouter = createOpenRouter({
 });
 
 export const chatModel = openrouter.chat(process.env.MODAL_NAME as string);
+
+// export const chatModel = "openai/gpt-4.1-mini";

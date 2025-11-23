@@ -36,20 +36,24 @@ import {
   SourcesContent,
   SourcesTrigger,
 } from "@/components/ai-elements/sources";
-import { Loader } from "@/components/ai-elements/loader";
 import { useResumeStore } from "@/store/useResumeStore";
 import { Shimmer } from "../ai-elements/shimmer";
 
-const Chat = () => {
+const Chat = ({ resumeId }: { resumeId?: string }) => {
   const [input, setInput] = useState("");
-  const { resumeData, updateResumeData } = useResumeStore();
+  const { resumeData, updateContent, updateTitle } = useResumeStore();
 
   const { messages, sendMessage, status, regenerate } = useChat({
     onToolCall: ({ toolCall }) => {
       if (toolCall.toolName === "updateResume") {
         // @ts-expect-error - input is not in the type definition but present in runtime
         const args = toolCall.args ?? toolCall.input;
-        updateResumeData(args);
+        updateContent(args);
+      }
+      if (toolCall.toolName === "updateTitle") {
+        // @ts-expect-error - input is not in the type definition but present in runtime
+        const args = toolCall.args ?? toolCall.input;
+        updateTitle(args);
       }
     },
   });
@@ -67,7 +71,8 @@ const Chat = () => {
       },
       {
         body: {
-          currentResumeState: resumeData,
+          currentResumeState: resumeData?.content,
+          resumeId,
         },
       }
     );

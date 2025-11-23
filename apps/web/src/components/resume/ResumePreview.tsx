@@ -6,11 +6,12 @@ import {
   SidebarTemplate,
   MinimalTemplate,
 } from "./ResumeTemplates";
+import type { ResumeType } from "@/app/schemas/ResumeSchema";
 
 const ResumePreview = forwardRef<HTMLDivElement>((props, ref) => {
-  const { resumeData: data, selectedTemplate } = useResumeStore();
+  const { resumeData, selectedTemplate } = useResumeStore();
 
-  if (!data) {
+  if (!resumeData) {
     return (
       <div className="flex items-center justify-center h-full text-muted-foreground">
         <div className="text-center space-y-2">
@@ -20,12 +21,19 @@ const ResumePreview = forwardRef<HTMLDivElement>((props, ref) => {
       </div>
     );
   }
+  console.log({ resumeData });
 
   return (
     <div ref={ref}>
-      {selectedTemplate === "modern" && <ModernTemplate data={data} />}
-      {selectedTemplate === "sidebar" && <SidebarTemplate data={data} />}
-      {selectedTemplate === "minimal" && <MinimalTemplate data={data} />}
+      {selectedTemplate === "modern" && (
+        <ModernTemplate data={resumeData.content as ResumeType} />
+      )}
+      {selectedTemplate === "sidebar" && (
+        <SidebarTemplate data={resumeData.content as ResumeType} />
+      )}
+      {selectedTemplate === "minimal" && (
+        <MinimalTemplate data={resumeData.content as ResumeType} />
+      )}
     </div>
   );
 });

@@ -6,6 +6,7 @@
       "name": "resumio",
       "dependencies": {
         "dotenv": "^17.2.2",
+        "pg": "^8.16.3",
         "zod": "^4.1.11",
       },
       "devDependencies": {
@@ -52,6 +53,7 @@
         "@radix-ui/react-tooltip": "^1.2.8",
         "@radix-ui/react-use-controllable-state": "^1.2.2",
         "@resumio/auth": "workspace:*",
+        "@resumio/db": "workspace:*",
         "@tanstack/react-form": "^1.12.3",
         "@tanstack/react-query": "^5.85.5",
         "@xyflow/react": "^12.9.3",
@@ -62,6 +64,7 @@
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
         "date-fns": "^4.1.0",
+        "drizzle-orm": "^0.44.2",
         "embla-carousel-react": "^8.6.0",
         "input-otp": "^1.4.2",
         "lucide-react": "^0.554.0",
@@ -123,6 +126,7 @@
       "dependencies": {
         "dotenv": "catalog:",
         "drizzle-orm": "^0.44.2",
+        "nanoid": "^5.1.6",
         "pg": "^8.14.1",
         "zod": "catalog:",
       },
