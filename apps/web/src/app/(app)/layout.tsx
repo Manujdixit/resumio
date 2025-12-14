@@ -1,7 +1,9 @@
-import Header from "@/components/header";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 import { auth } from "@resumio/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export default async function AppLayout({
   children,
@@ -16,10 +18,17 @@ export default async function AppLayout({
     redirect("/login");
   }
 
+  // Get sidebar state from cookie (default to collapsed)
+  const cookieStore = await cookies();
+  const sidebarState = cookieStore.get("sidebar_state")?.value;
+  const defaultOpen = sidebarState === "true";
+
   return (
-    <div className="grid grid-rows-[auto_1fr] h-svh">
-      <Header />
-      {children}
-    </div>
+    <SidebarProvider defaultOpen={defaultOpen}>
+      <AppSidebar />
+      <SidebarInset className="flex flex-col h-svh overflow-hidden">
+        {children}
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

@@ -1,12 +1,11 @@
-import React from 'react';
-import { GitCommitHorizontal } from 'lucide-react';
-import { Button } from './Button';
+import React from "react";
+import { GitCommitHorizontal } from "lucide-react";
+import { Button } from "./Button";
 
 export const Navbar: React.FC = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-zinc-800 bg-background/80 backdrop-blur-md h-14">
       <div className="max-w-[1400px] mx-auto h-full px-6 flex items-center justify-between">
-        
         {/* Brand */}
         <div className="flex items-center gap-3 group cursor-pointer">
           <div className="w-5 h-5 bg-white flex items-center justify-center">
@@ -26,10 +25,10 @@ export const Navbar: React.FC = () => {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center h-full">
-          {['Features', 'How it Works', 'Pricing'].map((item) => (
-            <a 
-              key={item} 
-              href={`#${item.toLowerCase().replace(/ /g, '-')}`} 
+          {["Features", "How it Works", "Pricing"].map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase().replace(/ /g, "-")}`}
               className="h-full flex items-center px-6 text-xs font-mono text-zinc-500 hover:text-white hover:bg-zinc-900 border-l border-zinc-900 first:border-l-0 transition-colors uppercase tracking-wider"
             >
               {item}
@@ -39,10 +38,22 @@ export const Navbar: React.FC = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          <a href="#" className="text-xs text-zinc-400 hover:text-white font-mono hidden sm:block">Log in</a>
-          <Button size="sm" variant="primary" mono icon={<GitCommitHorizontal size={14} />}>
-            BUILD RESUME
-          </Button>
+          <a
+            href="/login"
+            className="text-xs text-zinc-400 hover:text-white font-mono hidden sm:block"
+          >
+            Log in
+          </a>
+          <a href="/signup">
+            <Button
+              size="sm"
+              variant="primary"
+              mono
+              icon={<GitCommitHorizontal size={14} />}
+            >
+              BUILD RESUME
+            </Button>
+          </a>
         </div>
       </div>
     </nav>
