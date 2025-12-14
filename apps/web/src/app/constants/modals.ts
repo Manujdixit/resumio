@@ -1,9 +1,16 @@
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { createGateway } from "ai";
+// import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 
-const openrouter = createOpenRouter({
-  apiKey: process.env.OPENROUTERKEY,
+const gateway = createGateway({
+  apiKey: process.env.AI_GATEWAY_API_KEY ?? "",
 });
 
-export const chatModel = openrouter.chat(process.env.MODAL_NAME as string);
+// const openrouter = createOpenRouter({
+//   apiKey: process.env.OPENROUTERKEY,
+// });
 
-// export const chatModel = "openai/gpt-4.1-mini";
+// export const chatModel = openrouter.chat(process.env.MODAL_NAME as string);
+
+export const chatModel = gateway.languageModel(
+  process.env.MODAL_NAME as string
+);

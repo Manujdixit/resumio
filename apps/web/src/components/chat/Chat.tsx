@@ -27,9 +27,9 @@ import {
   PromptInputFooter,
   PromptInputTools,
 } from "@/components/ai-elements/prompt-input";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useChat } from "@ai-sdk/react";
-import { CopyIcon, RefreshCcwIcon } from "lucide-react";
+import { CopyIcon, RefreshCcwIcon, Loader2Icon } from "lucide-react";
 import {
   Source,
   Sources,
@@ -41,9 +41,11 @@ import { Shimmer } from "../ai-elements/shimmer";
 
 const Chat = ({ resumeId }: { resumeId?: string }) => {
   const [input, setInput] = useState("");
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const { resumeData, updateContent, updateTitle } = useResumeStore();
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { messages, sendMessage, status, regenerate } = useChat({
+  const { messages, sendMessage, status, regenerate, setMessages } = useChat({
     onToolCall: ({ toolCall }) => {
       if (toolCall.toolName === "updateResume") {
         // @ts-expect-error - input is not in the type definition but present in runtime
@@ -53,10 +55,63 @@ const Chat = ({ resumeId }: { resumeId?: string }) => {
       if (toolCall.toolName === "updateTitle") {
         // @ts-expect-error - input is not in the type definition but present in runtime
         const args = toolCall.args ?? toolCall.input;
-        updateTitle(args);
+        updateTitle(args.title);
       }
     },
   });
+
+  // Load saved chat messages on mount
+  useEffect(() => {
+    const loadChatHistory = async () => {
+      if (!resumeId) return;
+
+      setIsLoadingHistory(true);
+      try {
+        const response = await fetch(`/api/chat/messages?resumeId=${resumeId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.messages && data.messages.length > 0) {
+            setMessages(data.messages);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load chat history:", error);
+      } finally {
+        setIsLoadingHistory(false);
+      }
+    };
+
+    loadChatHistory();
+  }, [resumeId, setMessages]);
+
+  // Save messages when they change (debounced)
+  useEffect(() => {
+    if (!resumeId || messages.length === 0 || isLoadingHistory) return;
+
+    // Clear any pending save
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    // Debounce save by 1 second
+    saveTimeoutRef.current = setTimeout(async () => {
+      try {
+        await fetch("/api/chat/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ resumeId, messages }),
+        });
+      } catch (error) {
+        console.error("Failed to save chat messages:", error);
+      }
+    }, 1000);
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, [messages, resumeId, isLoadingHistory]);
 
   const handleSubmit = (message: PromptInputMessage) => {
     const hasText = Boolean(message.text);
@@ -78,6 +133,18 @@ const Chat = ({ resumeId }: { resumeId?: string }) => {
     );
     setInput("");
   };
+
+  if (isLoadingHistory) {
+    return (
+      <div className="max-w-4xl mx-auto p-6 relative size-full max-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3 text-muted-foreground">
+          <Loader2Icon className="size-6 animate-spin" />
+          <span className="text-sm">Loading chat history...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto p-6 relative size-full max-h-screen">
       <div className="flex flex-col h-full">

@@ -46,6 +46,42 @@ const tools = {
 export type ChatTools = InferUITools<typeof tools>;
 export type ChatMessages = UIMessage<never, UIDataTypes, ChatTools>;
 
+// GET endpoint to retrieve saved chat messages
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const resumeId = searchParams.get("resumeId");
+
+    if (!resumeId) {
+      return new Response("Resume ID is required", { status: 400 });
+    }
+
+    // Get authenticated user session
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+
+    // Fetch chat messages for this resume
+    const chatData = await db.query.chatMessage.findFirst({
+      where: and(
+        eq(schema.chatMessage.resumeId, resumeId),
+        eq(schema.chatMessage.userId, session.user.id)
+      ),
+    });
+
+    return Response.json({
+      messages: chatData?.messages || [],
+    });
+  } catch (error) {
+    console.error("Error fetching chat messages:", error);
+    return new Response("Failed to fetch chat messages", { status: 500 });
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const {
@@ -70,7 +106,7 @@ export async function POST(req: Request) {
     const result = streamText({
       model: chatModel,
       messages: convertToModelMessages(messages),
-      system: `You are an expert resume builder AI. 
+      system: `You are an expert resume builder.
              
       Current resume data:
       ${JSON.stringify(currentResumeState, null, 2)}
