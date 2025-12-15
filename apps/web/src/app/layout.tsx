@@ -4,25 +4,31 @@ import "../index.css";
 import Providers from "@/components/providers";
 
 const inter = Inter({
-  variable: "--font-inter-sans",
-  subsets: ["latin"],
+	variable: "--font-inter-sans",
+	subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "resumio",
-  description: "resumio",
+	title: "resumio",
+	description: "resumio",
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} antialiased`}>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en" suppressHydrationWarning>
+			<head>
+				<meta
+					name="google-site-verification"
+					content="Qo05zqdl_ZP3bhxd9ARBvjSO_i_hAtWWkhWXI854d6I"
+				/>
+			</head>
+			<body className={`${inter.variable} antialiased`}>
+				<Providers>{children}</Providers>
+			</body>
+		</html>
+	);
 }
