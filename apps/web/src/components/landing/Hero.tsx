@@ -64,12 +64,18 @@ export const Hero: React.FC = () => {
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [resumeData, setResumeData] = useState(INITIAL_RESUME);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const hasMounted = useRef(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
+    // Skip scroll on initial mount to prevent auto-scroll on page load
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
     scrollToBottom();
   }, [messages, isOptimizing]);
 

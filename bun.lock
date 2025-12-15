@@ -96,6 +96,7 @@
         "@types/node": "^20",
         "@types/react": "19.2.2",
         "@types/react-dom": "19.2.2",
+        "baseline-browser-mapping": "^2.9.7",
         "tailwindcss": "^4.1.10",
         "typescript": "^5",
       },
@@ -712,6 +713,8 @@
     "babel-plugin-react-compiler": ["babel-plugin-react-compiler@1.0.0", "", { "dependencies": { "@babel/types": "^7.26.0" } }, "sha512-Ixm8tFfoKKIPYdCCKYTsqv+Fd4IJ0DQqMyEimo+pxUOMUR9cVPlwTrFt9Avu+3cb6Zp3mAzl+t1MrG2fxxKsxw=="],
 
     "bail": ["bail@2.0.2", "", {}, "sha512-0xO6mYd7JB2YesxDKplafRpsiOzPt9V02ddPCLbY1xYGPOX24NTyN50qnUxgCPcSoYMhKpAuBTjQoRZCAkUDRw=="],
+
+    "baseline-browser-mapping": ["baseline-browser-mapping@2.9.7", "", { "bin": { "baseline-browser-mapping": "dist/cli.js" } }, "sha512-k9xFKplee6KIio3IDbwj+uaCLpqzOwakOgmqzPezM0sFJlFKcg30vk2wOiAJtkTSfx0SSQDSe8q+mWA/fSH5Zg=="],
 
     "better-auth": ["better-auth@1.4.0", "", { "dependencies": { "@better-auth/core": "1.4.0", "@better-auth/telemetry": "1.4.0", "@better-auth/utils": "0.3.0", "@better-fetch/fetch": "1.1.18", "@noble/ciphers": "^2.0.0", "@noble/hashes": "^2.0.0", "@standard-schema/spec": "^1.0.0", "better-call": "1.1.0", "defu": "^6.1.4", "jose": "^6.1.0", "kysely": "^0.28.5", "nanostores": "^1.0.1", "zod": "^4.1.12" } }, "sha512-W49RtERlaosdaLqwXhDxgOmxE0EC/8dVllIsnGpHqFgz4jO3CtW81ABNclXD1nJdy33xkebwX0NSPGn6/UFW/w=="],
 
