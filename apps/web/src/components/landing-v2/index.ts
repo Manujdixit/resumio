@@ -1,0 +1,11 @@
+export { FAQ } from "./FAQ";
+export { FeaturesNew } from "./FeaturesNew";
+export { FooterNew } from "./FooterNew";
+export { HeroNew } from "./HeroNew";
+export { HowItWorksNew } from "./HowItWorksNew";
+export { NavbarNew } from "./NavbarNew";
+export { StatsSection } from "./StatsSection";
+export { Testimonials } from "./Testimonials";
+export { ToolsGrid } from "./ToolsGrid";
+export { TrustBadges } from "./TrustBadges";
+export { UseCases } from "./UseCases";

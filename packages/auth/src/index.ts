@@ -1,9 +1,11 @@
 import { nextCookies } from "better-auth/next-js";
 import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { lastLoginMethod, oneTap } from "better-auth/plugins";
 // import { polar, checkout, portal } from "@polar-sh/better-auth";
 // import { polarClient } from "./lib/payments";
 import { db } from "@resumio/db";
+import { haveIBeenPwned } from "better-auth/plugins";
 import * as schema from "@resumio/db/schema/auth";
 
 export const auth = betterAuth<BetterAuthOptions>({
@@ -16,7 +18,31 @@ export const auth = betterAuth<BetterAuthOptions>({
   emailAndPassword: {
     enabled: true,
   },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    },
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID || "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+    },
+    facebook: {
+      clientId: process.env.FACEBOOK_CLIENT_ID || "",
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || "",
+    },
+    linkedin: {
+      clientId: process.env.LINKEDIN_CLIENT_ID || "",
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET || "",
+    },
+  },
+  account: {
+    accountLinking: {
+      enabled: true,
+    },
+  },
   plugins: [
+    oneTap(),
     // polar({
     // 	client: polarClient,
     // 	createCustomerOnSignUp: true,
@@ -36,5 +62,9 @@ export const auth = betterAuth<BetterAuthOptions>({
     // 	],
     // }),
     nextCookies(),
+    haveIBeenPwned({
+      customPasswordCompromisedMessage: "Please choose a more secure password.",
+    }),
+    lastLoginMethod({ storeInDatabase: true }),
   ],
 });

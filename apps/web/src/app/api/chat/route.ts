@@ -1,46 +1,46 @@
+import { auth } from "@resumio/auth";
+import { db, schema } from "@resumio/db";
 import {
-  streamText,
-  type UIMessage,
-  convertToModelMessages,
-  tool,
-  type InferUITools,
-  type UIDataTypes,
-  stepCountIs,
+	convertToModelMessages,
+	type InferUITools,
+	stepCountIs,
+	streamText,
+	tool,
+	type UIDataTypes,
+	type UIMessage,
 } from "ai";
+import { and, eq } from "drizzle-orm";
+import { headers } from "next/headers";
+import { z } from "zod";
 import { chatModel } from "@/app/constants/modals";
 import { ResumeSchema, type ResumeType } from "@/app/schemas/ResumeSchema";
-import { auth } from "@resumio/auth";
-import { headers } from "next/headers";
-import { db, schema } from "@resumio/db";
-import { eq, and } from "drizzle-orm";
-import { z } from "zod";
 
 const tools = {
-  updateResume: tool({
-    description: "Update the resume data based on user requests",
-    inputSchema: ResumeSchema,
-    execute: async (resumeData) => {
-      return {
-        success: true,
-        message: "Resume updated successfully.",
-        updatedResume: resumeData,
-      };
-    },
-  }),
+	updateResume: tool({
+		description: "Update the resume data based on user requests",
+		inputSchema: ResumeSchema,
+		execute: async (resumeData) => {
+			return {
+				success: true,
+				message: "Resume updated successfully.",
+				updatedResume: resumeData,
+			};
+		},
+	}),
 
-  updateTitle: tool({
-    description: "Update the resume title based on user requests/response.",
-    inputSchema: z.object({
-      title: z.string().describe("The new resume title"),
-    }),
-    execute: async (resumeTitle) => {
-      return {
-        success: true,
-        message: "Resume updated successfully.",
-        updatedTitle: resumeTitle,
-      };
-    },
-  }),
+	updateTitle: tool({
+		description: "Update the resume title based on user requests/response.",
+		inputSchema: z.object({
+			title: z.string().describe("The new resume title"),
+		}),
+		execute: async (resumeTitle) => {
+			return {
+				success: true,
+				message: "Resume updated successfully.",
+				updatedTitle: resumeTitle,
+			};
+		},
+	}),
 };
 
 export type ChatTools = InferUITools<typeof tools>;
@@ -48,65 +48,65 @@ export type ChatMessages = UIMessage<never, UIDataTypes, ChatTools>;
 
 // GET endpoint to retrieve saved chat messages
 export async function GET(req: Request) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const resumeId = searchParams.get("resumeId");
+	try {
+		const { searchParams } = new URL(req.url);
+		const resumeId = searchParams.get("resumeId");
 
-    if (!resumeId) {
-      return new Response("Resume ID is required", { status: 400 });
-    }
+		if (!resumeId) {
+			return new Response("Resume ID is required", { status: 400 });
+		}
 
-    // Get authenticated user session
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+		// Get authenticated user session
+		const session = await auth.api.getSession({
+			headers: await headers(),
+		});
 
-    if (!session?.user) {
-      return new Response("Unauthorized", { status: 401 });
-    }
+		if (!session?.user) {
+			return new Response("Unauthorized", { status: 401 });
+		}
 
-    // Fetch chat messages for this resume
-    const chatData = await db.query.chatMessage.findFirst({
-      where: and(
-        eq(schema.chatMessage.resumeId, resumeId),
-        eq(schema.chatMessage.userId, session.user.id)
-      ),
-    });
+		// Fetch chat messages for this resume
+		const chatData = await db.query.chatMessage.findFirst({
+			where: and(
+				eq(schema.chatMessage.resumeId, resumeId),
+				eq(schema.chatMessage.userId, session.user.id),
+			),
+		});
 
-    return Response.json({
-      messages: chatData?.messages || [],
-    });
-  } catch (error) {
-    console.error("Error fetching chat messages:", error);
-    return new Response("Failed to fetch chat messages", { status: 500 });
-  }
+		return Response.json({
+			messages: chatData?.messages || [],
+		});
+	} catch (error) {
+		console.error("Error fetching chat messages:", error);
+		return new Response("Failed to fetch chat messages", { status: 500 });
+	}
 }
 
 export async function POST(req: Request) {
-  try {
-    const {
-      messages,
-      currentResumeState,
-      resumeId,
-    }: {
-      messages: ChatMessages[];
-      currentResumeState: ResumeType;
-      resumeId?: string;
-    } = await req.json();
+	try {
+		const {
+			messages,
+			currentResumeState,
+			resumeId,
+		}: {
+			messages: ChatMessages[];
+			currentResumeState: ResumeType;
+			resumeId?: string;
+		} = await req.json();
 
-    // Get authenticated user session
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+		// Get authenticated user session
+		const session = await auth.api.getSession({
+			headers: await headers(),
+		});
 
-    if (!session?.user) {
-      return new Response("Unauthorized", { status: 401 });
-    }
+		if (!session?.user) {
+			return new Response("Unauthorized", { status: 401 });
+		}
 
-    const result = streamText({
-      model: chatModel,
-      messages: convertToModelMessages(messages),
-      system: `You are an expert resume builder.
+		const result = streamText({
+			model: chatModel,
+			messages: convertToModelMessages(messages),
+			system: `You are an expert resume builder.
              
       Current resume data:
       ${JSON.stringify(currentResumeState, null, 2)}
@@ -138,94 +138,94 @@ export async function POST(req: Request) {
 
       only ask for- Resume fields that are missing.
       `,
-      tools,
-      stopWhen: stepCountIs(5),
-      onFinish: async ({ response }) => {
-        // Handle database updates after tool calls
-        if (resumeId && response.messages) {
-          let currentResume = currentResumeState;
+			tools,
+			stopWhen: stepCountIs(5),
+			onFinish: async ({ response }) => {
+				// Handle database updates after tool calls
+				if (resumeId && response.messages) {
+					let currentResume = currentResumeState;
 
-          for (const message of response.messages) {
-            if (message.role === "assistant" && message.content) {
-              // Check if message content is an array with tool call parts
-              const content = Array.isArray(message.content)
-                ? message.content
-                : [message.content];
+					for (const message of response.messages) {
+						if (message.role === "assistant" && message.content) {
+							// Check if message content is an array with tool call parts
+							const content = Array.isArray(message.content)
+								? message.content
+								: [message.content];
 
-              for (const part of content) {
-                if (
-                  typeof part === "object" &&
-                  part !== null &&
-                  "type" in part &&
-                  part.type === "tool-call" &&
-                  "toolName" in part &&
-                  part.toolName === "updateTitle" &&
-                  "input" in part &&
-                  part.input &&
-                  typeof part.input === "object" &&
-                  "title" in part.input
-                ) {
-                  try {
-                    // Update the title in the database
-                    await db
-                      .update(schema.resume)
-                      .set({
-                        title: part.input.title as string,
-                        updatedAt: new Date(),
-                      })
-                      .where(
-                        and(
-                          eq(schema.resume.id, resumeId),
-                          eq(schema.resume.userId, session.user.id)
-                        )
-                      );
-                  } catch (error) {
-                    console.error("Error updating title in database:", error);
-                  }
-                } else if (
-                  typeof part === "object" &&
-                  part !== null &&
-                  "type" in part &&
-                  part.type === "tool-call" &&
-                  "toolName" in part &&
-                  part.toolName === "updateResume" &&
-                  "input" in part &&
-                  part.input &&
-                  typeof part.input === "object"
-                  // &&  "title" in part.input
-                ) {
-                  try {
-                    currentResume = {
-                      ...currentResume,
-                      ...(part.input as ResumeType),
-                    };
+							for (const part of content) {
+								if (
+									typeof part === "object" &&
+									part !== null &&
+									"type" in part &&
+									part.type === "tool-call" &&
+									"toolName" in part &&
+									part.toolName === "updateTitle" &&
+									"input" in part &&
+									part.input &&
+									typeof part.input === "object" &&
+									"title" in part.input
+								) {
+									try {
+										// Update the title in the database
+										await db
+											.update(schema.resume)
+											.set({
+												title: part.input.title as string,
+												updatedAt: new Date(),
+											})
+											.where(
+												and(
+													eq(schema.resume.id, resumeId),
+													eq(schema.resume.userId, session.user.id),
+												),
+											);
+									} catch (error) {
+										console.error("Error updating title in database:", error);
+									}
+								} else if (
+									typeof part === "object" &&
+									part !== null &&
+									"type" in part &&
+									part.type === "tool-call" &&
+									"toolName" in part &&
+									part.toolName === "updateResume" &&
+									"input" in part &&
+									part.input &&
+									typeof part.input === "object"
+									// &&  "title" in part.input
+								) {
+									try {
+										currentResume = {
+											...currentResume,
+											...(part.input as ResumeType),
+										};
 
-                    await db
-                      .update(schema.resume)
-                      .set({
-                        content: currentResume,
-                        updatedAt: new Date(),
-                      })
-                      .where(
-                        and(
-                          eq(schema.resume.id, resumeId),
-                          eq(schema.resume.userId, session.user.id)
-                        )
-                      );
-                  } catch (error) {
-                    console.error("Error updating resume in database:", error);
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-    });
+										await db
+											.update(schema.resume)
+											.set({
+												content: currentResume,
+												updatedAt: new Date(),
+											})
+											.where(
+												and(
+													eq(schema.resume.id, resumeId),
+													eq(schema.resume.userId, session.user.id),
+												),
+											);
+									} catch (error) {
+										console.error("Error updating resume in database:", error);
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+		});
 
-    return result.toUIMessageStreamResponse();
-  } catch (error) {
-    console.error("Error streaming chat completion:", error);
-    return new Response("Failed to stream chat completion", { status: 500 });
-  }
+		return result.toUIMessageStreamResponse();
+	} catch (error) {
+		console.error("Error streaming chat completion:", error);
+		return new Response("Failed to stream chat completion", { status: 500 });
+	}
 }

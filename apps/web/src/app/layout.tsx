@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "../index.css";
 import Providers from "@/components/providers";
 
-const inter = Inter({
-	variable: "--font-inter-sans",
+const manrope = Manrope({
+	variable: "--font-sans",
 	subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-	title: "resumio",
-	description: "resumio",
+	title: "resumebuild.cv",
+	description: "AI-powered resume builder",
+	verification: {
+		google: process.env.NEXT_PUBLIC_GSC_VERIFICATION,
+	},
 };
 
 export default function RootLayout({
@@ -20,13 +23,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<head>
-				<meta
-					name="google-site-verification"
-					content="Qo05zqdl_ZP3bhxd9ARBvjSO_i_hAtWWkhWXI854d6I"
-				/>
-			</head>
-			<body className={`${inter.variable} antialiased`}>
+			<body className={`${manrope.variable} font-sans antialiased`}>
 				<Providers>{children}</Providers>
 			</body>
 		</html>
