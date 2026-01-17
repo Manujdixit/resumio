@@ -142,9 +142,8 @@ export async function POST(req: Request) {
 			stopWhen: stepCountIs(5),
 			onFinish: async ({ response }) => {
 				// Handle database updates after tool calls
+				let currentResume = currentResumeState;
 				if (resumeId && response.messages) {
-					let currentResume = currentResumeState;
-
 					for (const message of response.messages) {
 						if (message.role === "assistant" && message.content) {
 							// Check if message content is an array with tool call parts
@@ -195,10 +194,16 @@ export async function POST(req: Request) {
 									// &&  "title" in part.input
 								) {
 									try {
+										const { personalInfo, ...otherUpdates } = part.input as Partial<ResumeType>;
 										currentResume = {
 											...currentResume,
-											...(part.input as ResumeType),
+											...otherUpdates,
+											personalInfo: {
+												...(currentResume.personalInfo ?? {}),
+												...(personalInfo ?? {}),
+											},
 										};
+										
 
 										await db
 											.update(schema.resume)
