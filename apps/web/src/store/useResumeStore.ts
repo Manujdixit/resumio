@@ -22,12 +22,22 @@ export const useResumeStore = create<ResumeStore>((set) => ({
 	setResumeData: (data) => set({ resumeData: data }),
 	resetResumeData: () => set({ resumeData: null }),
 	setSelectedTemplate: (template) => set({ selectedTemplate: template }),
-	updateContent: (content: ResumeType) =>
-		set((state) => ({
+	updateContent: (content: ResumeType) =>set((state) => ({
 			resumeData: state.resumeData
 				? {
 						...state.resumeData,
-						content: { ...(state.resumeData.content as object), ...content },
+						content: { ...(state.resumeData.content as object), ...Object.fromEntries(Object.entries(content).map(([key, value]) => { 
+							if(key==="personalInfo" && typeof value === "object")
+							{
+								return ["personalInfo" , {...state.resumeData?.content["personalInfo"], ...value}] 
+							} 
+							else 
+							{
+								return [key, value]
+							}
+						}
+					     )) 
+						},
 					}
 				: null,
 		})),
