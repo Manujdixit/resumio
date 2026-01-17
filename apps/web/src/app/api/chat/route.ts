@@ -194,18 +194,14 @@ export async function POST(req: Request) {
 									// &&  "title" in part.input
 								) {
 									try {
-										let obj : ResumeType = {};
-										Object.entries(part.input).forEach(([key, value]) => {
-											if(key === "personalInfo") {
-												obj["personalInfo"] = {...currentResume["personalInfo"], ...value};
-											}
-											else{
-											obj[key as keyof ResumeType] = value;
-											}
-										});
+										const { personalInfo, ...otherUpdates } = part.input as Partial<ResumeType>;
 										currentResume = {
 											...currentResume,
-											...obj,
+											...otherUpdates,
+											personalInfo: {
+												...(currentResume.personalInfo ?? {}),
+												...(personalInfo ?? {}),
+											},
 										};
 										
 

@@ -22,25 +22,29 @@ export const useResumeStore = create<ResumeStore>((set) => ({
 	setResumeData: (data) => set({ resumeData: data }),
 	resetResumeData: () => set({ resumeData: null }),
 	setSelectedTemplate: (template) => set({ selectedTemplate: template }),
-	updateContent: (content: ResumeType) =>set((state) => ({
-			resumeData: state.resumeData
-				? {
-						...state.resumeData,
-						content: { ...(state.resumeData.content as object), ...Object.fromEntries(Object.entries(content).map(([key, value]) => { 
-							if(key==="personalInfo" && typeof value === "object")
-							{
-								return ["personalInfo" , {...state.resumeData?.content["personalInfo"], ...value}] 
-							} 
-							else 
-							{
-								return [key, value]
-							}
-						}
-					     )) 
-						},
-					}
-				: null,
-		})),
+	updateContent: (updates: ResumeType) =>
+        set((state) => {
+            if (!state.resumeData) {
+                return { resumeData: null };
+            }
+
+            const currentContent = (state.resumeData.content as ResumeType) ?? {};
+            const { personalInfo, ...otherUpdates } = updates;
+
+            return {
+                resumeData: {
+                    ...state.resumeData,
+                    content: {
+                        ...currentContent,
+                        ...otherUpdates,
+                        personalInfo: {
+                            ...(currentContent.personalInfo ?? {}),
+                            ...(personalInfo ?? {}),
+                        },
+                    },
+                },
+            };
+        }),
 	updateTitle: (title: string) =>
 		set((state) => ({
 			resumeData: state.resumeData
