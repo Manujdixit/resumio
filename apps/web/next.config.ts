@@ -8,6 +8,10 @@ dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 const nextConfig: NextConfig = {
   typedRoutes: true,
   reactCompiler: true,
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    return config;
+  },
 };
 
 export default withSentryConfig(nextConfig, {
