@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Save, Trash2 } from "lucide-react";
+import { Loader2, Plus, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ interface PersonalInfoFormProps {
 	onChange: (data: ResumeType["personalInfo"]) => void;
 	onSave?: () => void;
 	hasUnsavedChanges?: boolean;
+	isSaving?: boolean;
 }
 
 export function PersonalInfoForm({
@@ -21,6 +22,7 @@ export function PersonalInfoForm({
 	onChange,
 	onSave,
 	hasUnsavedChanges,
+	isSaving,
 }: PersonalInfoFormProps) {
 	const handleFieldChange = (field: string, value: string) => {
 		onChange({
@@ -41,9 +43,18 @@ export function PersonalInfoForm({
 					)}
 				</div>
 				{onSave && (
-					<Button onClick={onSave} size="sm" variant="outline">
-						<Save className="mr-2 h-4 w-4" />
-						Save
+					<Button
+						onClick={onSave}
+						size="sm"
+						variant="outline"
+						disabled={isSaving}
+					>
+						{isSaving ? (
+							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						) : (
+							<Save className="mr-2 h-4 w-4" />
+						)}
+						{isSaving ? "Saving..." : "Save"}
 					</Button>
 				)}
 			</CardHeader>

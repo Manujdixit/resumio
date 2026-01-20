@@ -10,6 +10,7 @@ import {
 } from "@/components/ai-elements/conversation";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useUpdateResume } from "@/hooks/use-resumes";
 import { type ResumeType, useResumeStore } from "@/store/useResumeStore";
 import { EducationForm } from "./EducationForm";
 import { ExperienceForm } from "./ExperienceForm";
@@ -24,6 +25,7 @@ interface FormEditorProps {
 
 export function FormEditor({ resumeId }: FormEditorProps) {
 	const { resumeData, updateContent } = useResumeStore();
+	const updateResumeMutation = useUpdateResume();
 
 	const currentContent = resumeData?.content as ResumeType;
 
@@ -105,41 +107,47 @@ export function FormEditor({ resumeId }: FormEditorProps) {
 		markUnsaved("projects");
 	};
 
-	const savePersonalInfo = () => {
-		updateContent({ personalInfo: localPersonalInfo });
-		markSaved("personalInfo");
-		toast.success("Personal information saved");
+	// Save function that persists to database
+	const saveSection = async (section: string, data: Partial<ResumeType>) => {
+		try {
+			// First update local store state for immediate UI feedback
+			updateContent(data);
+			markSaved(section);
+
+			// Then persist to database
+			const updatedContent = {
+				...currentContent,
+				...data,
+			};
+
+			await updateResumeMutation.mutateAsync({
+				id: resumeId,
+				data: {
+					content: updatedContent,
+				},
+			});
+
+			toast.success(
+				`${section.charAt(0).toUpperCase() + section.slice(1)} saved`,
+			);
+		} catch (error) {
+			console.error(`Failed to save ${section}:`, error);
+			toast.error(`Failed to save ${section}`);
+			// Don't mark as saved if database save failed
+			markUnsaved(section);
+		}
 	};
 
-	const saveSummary = () => {
-		updateContent({ summary: localSummary });
-		markSaved("summary");
-		toast.success("Summary saved");
-	};
-
-	const saveExperience = () => {
-		updateContent({ experience: localExperience });
-		markSaved("experience");
-		toast.success("Experience saved");
-	};
-
-	const saveEducation = () => {
-		updateContent({ education: localEducation });
-		markSaved("education");
-		toast.success("Education saved");
-	};
-
-	const saveSkills = () => {
-		updateContent({ skills: localSkills });
-		markSaved("skills");
-		toast.success("Skills saved");
-	};
-
-	const saveProjects = () => {
-		updateContent({ projects: localProjects });
-		markSaved("projects");
-		toast.success("Projects saved");
-	};
+	const savePersonalInfo = () =>
+		saveSection("personal info", { personalInfo: localPersonalInfo });
+	const saveSummary = () => saveSection("summary", { summary: localSummary });
+	const saveExperience = () =>
+		saveSection("experience", { experience: localExperience });
+	const saveEducation = () =>
+		saveSection("education", { education: localEducation });
+	const saveSkills = () => saveSection("skills", { skills: localSkills });
+	const saveProjects = () =>
+		saveSection("projects", { projects: localProjects });
 
 	if (!currentContent) {
 		return (
@@ -172,6 +180,7 @@ export function FormEditor({ resumeId }: FormEditorProps) {
 							onChange={handlePersonalInfoChange}
 							onSave={savePersonalInfo}
 							hasUnsavedChanges={unsavedSections.has("personalInfo")}
+							isSaving={updateResumeMutation.isPending}
 						/>
 
 						<SummaryForm
@@ -179,6 +188,7 @@ export function FormEditor({ resumeId }: FormEditorProps) {
 							onChange={handleSummaryChange}
 							onSave={saveSummary}
 							hasUnsavedChanges={unsavedSections.has("summary")}
+							isSaving={updateResumeMutation.isPending}
 						/>
 
 						<ExperienceForm
@@ -186,6 +196,7 @@ export function FormEditor({ resumeId }: FormEditorProps) {
 							onChange={handleExperienceChange}
 							onSave={saveExperience}
 							hasUnsavedChanges={unsavedSections.has("experience")}
+							isSaving={updateResumeMutation.isPending}
 						/>
 
 						<EducationForm
@@ -193,6 +204,7 @@ export function FormEditor({ resumeId }: FormEditorProps) {
 							onChange={handleEducationChange}
 							onSave={saveEducation}
 							hasUnsavedChanges={unsavedSections.has("education")}
+							isSaving={updateResumeMutation.isPending}
 						/>
 
 						<SkillsForm
@@ -200,6 +212,7 @@ export function FormEditor({ resumeId }: FormEditorProps) {
 							onChange={handleSkillsChange}
 							onSave={saveSkills}
 							hasUnsavedChanges={unsavedSections.has("skills")}
+							isSaving={updateResumeMutation.isPending}
 						/>
 
 						<ProjectsForm
@@ -207,27 +220,9 @@ export function FormEditor({ resumeId }: FormEditorProps) {
 							onChange={handleProjectsChange}
 							onSave={saveProjects}
 							hasUnsavedChanges={unsavedSections.has("projects")}
+							isSaving={updateResumeMutation.isPending}
 						/>
 
-						<ExperienceForm
-							data={currentContent.experience}
-							onChange={handleExperienceChange}
-						/>
-
-						<EducationForm
-							data={currentContent.education}
-							onChange={handleEducationChange}
-						/>
-
-						<SkillsForm
-							data={currentContent.skills}
-							onChange={handleSkillsChange}
-						/>
-
-						<ProjectsForm
-							data={currentContent.projects}
-							onChange={handleProjectsChange}
-						/>
 					</div>
 				</ConversationContent>
 				<ConversationScrollButton />

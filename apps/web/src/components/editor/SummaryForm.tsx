@@ -1,6 +1,6 @@
 "use client";
 
-import { Save } from "lucide-react";
+import { Loader2, Save } from "lucide-react";
 import { useState } from "react";
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ interface SummaryFormProps {
 	onChange: (data: ResumeType["summary"]) => void;
 	onSave?: () => void;
 	hasUnsavedChanges?: boolean;
+	isSaving?: boolean;
 }
 
 export function SummaryForm({
@@ -20,6 +21,7 @@ export function SummaryForm({
 	onChange,
 	onSave,
 	hasUnsavedChanges,
+	isSaving,
 }: SummaryFormProps) {
 	const handleChange = (value: string) => {
 		onChange(value);
@@ -37,9 +39,18 @@ export function SummaryForm({
 					)}
 				</div>
 				{onSave && (
-					<Button onClick={onSave} size="sm" variant="outline">
-						<Save className="mr-2 h-4 w-4" />
-						Save
+					<Button
+						onClick={onSave}
+						size="sm"
+						variant="outline"
+						disabled={isSaving}
+					>
+						{isSaving ? (
+							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						) : (
+							<Save className="mr-2 h-4 w-4" />
+						)}
+						{isSaving ? "Saving..." : "Save"}
 					</Button>
 				)}
 			</CardHeader>

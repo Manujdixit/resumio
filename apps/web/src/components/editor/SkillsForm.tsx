@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Save, Trash2, X } from "lucide-react";
+import { Loader2, Plus, Save, Trash2, X } from "lucide-react";
 import { useState } from "react";
 
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
@@ -14,6 +14,7 @@ interface SkillsFormProps {
 	onChange: (data: ResumeType["skills"]) => void;
 	onSave?: () => void;
 	hasUnsavedChanges?: boolean;
+	isSaving?: boolean;
 }
 
 export function SkillsForm({
@@ -21,6 +22,7 @@ export function SkillsForm({
 	onChange,
 	onSave,
 	hasUnsavedChanges,
+	isSaving,
 }: SkillsFormProps) {
 	const [newSkill, setNewSkill] = useState("");
 
@@ -54,9 +56,18 @@ export function SkillsForm({
 					)}
 				</div>
 				{onSave && (
-					<Button onClick={onSave} size="sm" variant="outline">
-						<Save className="mr-2 h-4 w-4" />
-						Save
+					<Button
+						onClick={onSave}
+						size="sm"
+						variant="outline"
+						disabled={isSaving}
+					>
+						{isSaving ? (
+							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						) : (
+							<Save className="mr-2 h-4 w-4" />
+						)}
+						{isSaving ? "Saving..." : "Save"}
 					</Button>
 				)}
 			</CardHeader>

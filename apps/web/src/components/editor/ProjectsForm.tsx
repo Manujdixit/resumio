@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Save, Trash2 } from "lucide-react";
+import { Loader2, Plus, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
@@ -15,6 +15,7 @@ interface ProjectsFormProps {
 	onChange: (data: ResumeType["projects"]) => void;
 	onSave?: () => void;
 	hasUnsavedChanges?: boolean;
+	isSaving?: boolean;
 }
 
 const emptyProject = {
@@ -28,6 +29,7 @@ export function ProjectsForm({
 	onChange,
 	onSave,
 	hasUnsavedChanges,
+	isSaving,
 }: ProjectsFormProps) {
 	const handleAdd = () => {
 		onChange([...(data || []), emptyProject]);
@@ -75,9 +77,18 @@ export function ProjectsForm({
 						Add Project
 					</Button>
 					{onSave && (
-						<Button onClick={onSave} size="sm" variant="outline">
-							<Save className="mr-2 h-4 w-4" />
-							Save
+						<Button
+							onClick={onSave}
+							size="sm"
+							variant="outline"
+							disabled={isSaving}
+						>
+							{isSaving ? (
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+							) : (
+								<Save className="mr-2 h-4 w-4" />
+							)}
+							{isSaving ? "Saving..." : "Save"}
 						</Button>
 					)}
 				</div>

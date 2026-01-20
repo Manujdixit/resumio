@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Save, Trash2 } from "lucide-react";
+import { Loader2, Plus, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ interface EducationFormProps {
 	onChange: (data: ResumeType["education"]) => void;
 	onSave?: () => void;
 	hasUnsavedChanges?: boolean;
+	isSaving?: boolean;
 }
 
 const emptyEducation = {
@@ -29,6 +30,7 @@ export function EducationForm({
 	onChange,
 	onSave,
 	hasUnsavedChanges,
+	isSaving,
 }: EducationFormProps) {
 	const handleAdd = () => {
 		onChange([...(data || []), emptyEducation]);
@@ -64,9 +66,18 @@ export function EducationForm({
 						Add Education
 					</Button>
 					{onSave && (
-						<Button onClick={onSave} size="sm" variant="outline">
-							<Save className="mr-2 h-4 w-4" />
-							Save
+						<Button
+							onClick={onSave}
+							size="sm"
+							variant="outline"
+							disabled={isSaving}
+						>
+							{isSaving ? (
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+							) : (
+								<Save className="mr-2 h-4 w-4" />
+							)}
+							{isSaving ? "Saving..." : "Save"}
 						</Button>
 					)}
 				</div>
