@@ -1,6 +1,5 @@
 "use client";
 
-import { Loader2, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -8,8 +7,6 @@ import {
 	ConversationContent,
 	ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useUpdateResume } from "@/hooks/use-resumes";
 import { type ResumeType, useResumeStore } from "@/store/useResumeStore";
 import { EducationForm } from "./EducationForm";
@@ -222,7 +219,6 @@ export function FormEditor({ resumeId }: FormEditorProps) {
 							hasUnsavedChanges={unsavedSections.has("projects")}
 							isSaving={updateResumeMutation.isPending}
 						/>
-
 					</div>
 				</ConversationContent>
 				<ConversationScrollButton />

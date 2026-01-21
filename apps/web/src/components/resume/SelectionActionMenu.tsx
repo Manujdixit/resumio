@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
-import { createPortal } from "react-dom";
 import {
-	Sparkles,
-	Zap,
-	Scissors,
-	FileText,
-	TrendingUp,
 	CheckCircle,
+	FileText,
 	MessageSquare,
+	Scissors,
+	Sparkles,
+	TrendingUp,
+	Zap,
 } from "lucide-react";
-import { useAiActionStore, type AiActionType } from "@/store/useAiActionStore";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
+import { type AiActionType, useAiActionStore } from "@/store/useAiActionStore";
 
 interface SelectionPosition {
 	top: number;
@@ -54,7 +54,9 @@ interface SelectionActionMenuProps {
 	containerRef: React.RefObject<HTMLElement | null>;
 }
 
-export function SelectionActionMenu({ containerRef }: SelectionActionMenuProps) {
+export function SelectionActionMenu({
+	containerRef,
+}: SelectionActionMenuProps) {
 	const [selection, setSelection] = useState<SelectionState | null>(null);
 	const [isVisible, setIsVisible] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
@@ -162,7 +164,7 @@ export function SelectionActionMenu({ containerRef }: SelectionActionMenuProps) 
 				"cursor-pdf-custom",
 				"border border-zinc-700/50 bg-zinc-900/95 backdrop-blur-xl",
 				"p-1.5 shadow-2xl shadow-black/50",
-				"animate-in fade-in-0 zoom-in-95 duration-150",
+				"fade-in-0 zoom-in-95 animate-in duration-150",
 			)}
 			style={{
 				top: selection.position.top,
@@ -176,7 +178,7 @@ export function SelectionActionMenu({ containerRef }: SelectionActionMenuProps) 
 					onClick={() => handleAction(action.type)}
 					className={cn(
 						"flex items-center gap-1.5 rounded-lg px-2.5 py-1.5",
-						"text-xs font-medium text-zinc-300",
+						"font-medium text-xs text-zinc-300",
 						"transition-all duration-150",
 						"hover:bg-zinc-700/70 hover:text-white",
 						"focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 focus:ring-offset-zinc-900",

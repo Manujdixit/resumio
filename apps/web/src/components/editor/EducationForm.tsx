@@ -1,7 +1,6 @@
 "use client";
 
 import { Loader2, Plus, Save, Trash2 } from "lucide-react";
-import { useState } from "react";
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,6 +17,7 @@ interface EducationFormProps {
 }
 
 const emptyEducation = {
+	id: crypto.randomUUID(),
 	institution: "",
 	degree: "",
 	startDate: "",
@@ -32,16 +32,22 @@ export function EducationForm({
 	hasUnsavedChanges,
 	isSaving,
 }: EducationFormProps) {
+	// Ensure all education entries have IDs (for backward compatibility)
+	const normalizedData = data?.map((edu) =>
+		edu.id ? edu : { ...edu, id: crypto.randomUUID() },
+	);
+
 	const handleAdd = () => {
-		onChange([...(data || []), emptyEducation]);
+		const newEducation = { ...emptyEducation, id: crypto.randomUUID() };
+		onChange([...(normalizedData || []), newEducation]);
 	};
 
 	const handleRemove = (index: number) => {
-		onChange((data || []).filter((_, i) => i !== index));
+		onChange(normalizedData?.filter((_, i) => i !== index) || []);
 	};
 
 	const handleFieldChange = (index: number, field: string, value: string) => {
-		const updatedData = [...(data || [])];
+		const updatedData = [...(normalizedData || [])];
 		updatedData[index] = {
 			...updatedData[index],
 			[field]: value,
@@ -83,9 +89,9 @@ export function EducationForm({
 				</div>
 			</CardHeader>
 			<CardContent className="space-y-6">
-				{data?.map((education, index) => (
+				{normalizedData?.map((education, index) => (
 					<div
-						key={`education-${index}-${education.institution}`}
+						key={education.id || `education-${index}`}
 						className="space-y-4 rounded-lg border p-4"
 					>
 						<div className="flex items-start justify-between">
@@ -164,7 +170,7 @@ export function EducationForm({
 					</div>
 				))}
 
-				{(!data || data.length === 0) && (
+				{(!normalizedData || normalizedData.length === 0) && (
 					<div className="py-8 text-center text-muted-foreground">
 						No education added yet. Click "Add Education" to get started.
 					</div>

@@ -19,6 +19,7 @@ interface ProjectsFormProps {
 }
 
 const emptyProject = {
+	id: crypto.randomUUID(),
 	name: "",
 	description: "",
 	tech: [],
@@ -31,12 +32,18 @@ export function ProjectsForm({
 	hasUnsavedChanges,
 	isSaving,
 }: ProjectsFormProps) {
+	// Ensure all project entries have IDs (for backward compatibility)
+	const normalizedData = data?.map((project) =>
+		project.id ? project : { ...project, id: crypto.randomUUID() },
+	);
+
 	const handleAdd = () => {
-		onChange([...(data || []), emptyProject]);
+		const newProject = { ...emptyProject, id: crypto.randomUUID() };
+		onChange([...(normalizedData || []), newProject]);
 	};
 
 	const handleRemove = (index: number) => {
-		onChange((data || []).filter((_, i) => i !== index));
+		onChange(normalizedData?.filter((_, i) => i !== index) || []);
 	};
 
 	const handleFieldChange = (
@@ -44,7 +51,7 @@ export function ProjectsForm({
 		field: string,
 		value: string | string[],
 	) => {
-		const updatedData = [...(data || [])];
+		const updatedData = [...(normalizedData || [])];
 		updatedData[index] = {
 			...updatedData[index],
 			[field]: value,
@@ -94,9 +101,9 @@ export function ProjectsForm({
 				</div>
 			</CardHeader>
 			<CardContent className="space-y-6">
-				{data?.map((project, index) => (
+				{normalizedData?.map((project, index) => (
 					<div
-						key={`project-${index}-${project.name}`}
+						key={project.id || `project-${index}`}
 						className="space-y-4 rounded-lg border p-4"
 					>
 						<div className="flex items-start justify-between">
@@ -155,7 +162,7 @@ export function ProjectsForm({
 					</div>
 				))}
 
-				{(!data || data.length === 0) && (
+				{(!normalizedData || normalizedData.length === 0) && (
 					<div className="py-8 text-center text-muted-foreground">
 						No projects added yet. Click "Add Project" to showcase your work.
 					</div>

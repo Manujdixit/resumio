@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 		textDecoration: "none",
 	},
 	section: {
-		marginBottom: 20,
+		marginBottom: 10,
 	},
 	sectionTitle: {
 		fontSize: 14,
@@ -220,7 +220,12 @@ export const MinimalTemplatePdf = ({ data }: { data: ResumeType }) => {
 										<Text style={styles.itemTitle}>{exp.company}</Text>
 										<Text style={styles.itemSubtitle}>{exp.role}</Text>
 										<View style={{ marginTop: 4 }}>
-											{exp.description.split("\n").map((line, i) => (
+											{(Array.isArray(exp.description)
+												? exp.description
+												: exp.description
+													? [exp.description]
+													: []
+											).map((line, i) => (
 												<View key={i} style={styles.bulletPoint}>
 													<Text style={styles.bulletDot}>•</Text>
 													<Text style={styles.bulletContent}>{line}</Text>

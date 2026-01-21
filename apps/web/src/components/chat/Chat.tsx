@@ -37,11 +37,11 @@ import {
 	SourcesTrigger,
 } from "@/components/ai-elements/sources";
 import { cn } from "@/lib/utils";
-import { useResumeStore } from "@/store/useResumeStore";
 import {
-	useAiActionStore,
 	generatePromptForAction,
+	useAiActionStore,
 } from "@/store/useAiActionStore";
+import { useResumeStore } from "@/store/useResumeStore";
 import { Shimmer } from "../ai-elements/shimmer";
 
 const Chat = ({

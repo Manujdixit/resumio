@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
 		color: "#e0e0e0",
 	},
 	section: {
-		marginBottom: 16,
+		marginBottom: -10,
 	},
 	itemHeader: {
 		flexDirection: "row",
@@ -211,7 +211,7 @@ export const SidebarTemplatePdf = ({ data }: { data: ResumeType }) => {
 						<View style={styles.section}>
 							<Text style={styles.sectionTitle}>Professional Experience</Text>
 							{data.experience.map((exp, index) => (
-								<View key={index} style={{ marginBottom: 12 }}>
+								<View key={index} style={{ marginBottom: 5 }}>
 									<View style={styles.itemHeader}>
 										<View>
 											<Text style={styles.itemTitle}>{exp.company}</Text>
@@ -221,8 +221,13 @@ export const SidebarTemplatePdf = ({ data }: { data: ResumeType }) => {
 											{exp.startDate} – {exp.endDate || "Present"}
 										</Text>
 									</View>
-									<View style={{ marginTop: 4 }}>
-										{exp.description.split("\n").map((line, i) => (
+									<View style={{ marginTop: 3 }}>
+										{(Array.isArray(exp.description)
+											? exp.description
+											: exp.description
+												? [exp.description]
+												: []
+										).map((line, i) => (
 											<View key={i} style={styles.bulletPoint}>
 												<Text style={styles.bulletDot}>•</Text>
 												<Text style={styles.bulletContent}>{line}</Text>
