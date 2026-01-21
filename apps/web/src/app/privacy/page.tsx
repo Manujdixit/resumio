@@ -1,15 +1,34 @@
 import type { Metadata } from "next";
 import { FooterNew, NavbarNew } from "@/components/landing-v2";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { generateWebPageSchema, siteConfig } from "@/lib/seo-config";
 
 export const metadata: Metadata = {
 	title: "Privacy Policy | resumebuild.cv",
 	description:
 		"Learn how resumebuild.cv collects, uses, and protects your personal information.",
+	openGraph: {
+		title: "Privacy Policy | resumebuild.cv",
+		description:
+			"Learn how resumebuild.cv collects, uses, and protects your personal information.",
+		url: `${siteConfig.url}/privacy`,
+		type: "website",
+	},
+	alternates: {
+		canonical: `${siteConfig.url}/privacy`,
+	},
 };
+
+const privacyPageSchema = generateWebPageSchema(
+	"Privacy Policy",
+	"Learn how resumebuild.cv collects, uses, and protects your personal information.",
+	`${siteConfig.url}/privacy`,
+);
 
 export default function PrivacyPolicyPage() {
 	return (
 		<div className="min-h-screen bg-background font-sans text-white">
+			<JsonLd data={privacyPageSchema} />
 			{/* Grid Background Layer */}
 			<div className="pointer-events-none fixed inset-0 z-0 bg-grid-pattern bg-grid-sm opacity-[0.03]" />
 

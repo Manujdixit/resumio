@@ -2,6 +2,7 @@
 import { Minus, Plus } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 const faqs = [
 	{
@@ -36,6 +37,20 @@ const faqs = [
 	},
 ];
 
+// Generate FAQPage Schema for AI search engines
+const faqSchema = {
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	mainEntity: faqs.map((faq) => ({
+		"@type": "Question",
+		name: faq.question,
+		acceptedAnswer: {
+			"@type": "Answer",
+			text: faq.answer,
+		},
+	})),
+};
+
 export const FAQ: React.FC = () => {
 	const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -45,6 +60,7 @@ export const FAQ: React.FC = () => {
 
 	return (
 		<section className="bg-gray-50 py-24">
+			<JsonLd data={faqSchema} />
 			<div className="mx-auto max-w-3xl px-6">
 				<div className="mb-16 text-center">
 					<h2 className="mb-4 font-bold text-3xl text-gray-900 md:text-4xl">
@@ -58,10 +74,11 @@ export const FAQ: React.FC = () => {
 				<div className="space-y-4">
 					{faqs.map((faq, index) => (
 						<div
-							key={index}
+							key={`faq-${index}`}
 							className="overflow-hidden rounded-xl border border-gray-100 bg-white"
 						>
 							<button
+								type="button"
 								onClick={() => toggleFaq(index)}
 								className="flex w-full items-center justify-between p-6 text-left transition-colors hover:bg-gray-50"
 							>

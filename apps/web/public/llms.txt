@@ -1,0 +1,169 @@
+# llms.txt - Structured content map for LLM-based search
+# Format: markdown with clear hierarchy for AI retrieval
+# Last Updated: 2025-01-21
+
+# resumebuild.cv
+
+## Overview
+
+resumebuild.cv is an AI-powered resume builder that helps professionals create ATS-optimized resumes through a conversational AI interface. The platform combines AI-driven content generation with professional templates to produce job-ready resumes in minutes.
+
+## Key Features
+
+### AI Resume Generation
+- **Chat-Based Creation**: Conversational interface guides users through resume building
+- **Smart Content Suggestions**: AI analyzes input and suggests improvements
+- **Achievement Optimization**: Transforms basic descriptions into impactful bullet points
+- **Action Verb Enhancement**: Automatically improves language for stronger impact
+
+### ATS Optimization
+- **Applicant Tracking System Compatibility**: All templates tested against 50+ ATS systems
+- **Keyword Optimization**: AI identifies and incorporates relevant industry keywords
+- **Format Compliance**: Ensures proper structure for automated parsing
+- **Compatibility Checking**: Real-time validation of ATS requirements
+
+### Professional Templates
+- Multiple modern resume designs
+- Industry-specific template recommendations
+- Customizable styling and layouts
+- Professional typography and spacing
+- Print-ready formatting
+
+### Editing Modes
+- **Chat Mode**: Conversational editing with AI assistant
+- **Form Mode**: Traditional structured input fields
+- **Real-Time Preview**: Live resume preview while editing
+- **Template Switching**: Change designs without losing content
+
+### Export & Sharing
+- **PDF Export**: High-quality, print-ready PDF generation
+- **Public Sharing**: Optional public links for portfolio showcasing
+- **Version Management**: Create multiple tailored versions for different applications
+- **LinkedIn Import**: One-click profile data import
+
+## How It Works
+
+1. **Start a Conversation**: Tell the AI about your work experience, skills, and career goals
+2. **AI Generates Content**: The system creates professionally formatted resume sections
+3. **Review & Refine**: Use chat or form mode to make adjustments
+4. **Choose Template**: Select from professional designs optimized for your industry
+5. **Export**: Download as PDF or share via public link
+
+## Use Cases
+
+### Career Changers
+- Reframe experience for new industries
+- Highlight transferable skills
+- Create compelling career transition narratives
+
+### First-Time Resume Creators
+- Guided process for resume novices
+- Educational tips throughout creation
+- Professional formatting guaranteed
+
+### Experienced Professionals
+- Modernize outdated resume formats
+- Optimize for current ATS systems
+- Maintain multiple versions for different opportunities
+
+### Active Job Seekers
+- Quickly tailor resumes for specific applications
+- Track which version sent to which employer
+- Ensure ATS compatibility for every submission
+
+## Target Problems Solved
+
+- **ATS Rejection**: Many resumes fail automated screening due to formatting issues
+- **Weak Content**: Generic descriptions fail to highlight achievements
+- **Time Consumption**: Traditional resume building takes hours or days
+- **Format Inconsistency**: Manual formatting often breaks across different systems
+- **Lack of Expertise**: Most people don't know resume best practices
+- **Version Management**: Difficult to maintain multiple tailored resumes
+
+## Technology Stack
+
+- Platform: Web-based application (Next.js, React)
+- AI Integration: Conversational AI for content generation
+- Real-time Collaboration: Live preview and editing
+- Cloud Storage: Secure, encrypted user data storage
+- Export Engine: High-quality PDF generation
+
+## Pricing
+
+- **Free Plan**: Create and download one resume with core features
+- **Premium Plans**: Unlimited resumes, advanced features, cover letter generation
+- **Enterprise**: Team collaboration and admin controls
+
+Note: Check website for current pricing details
+
+## Frequently Asked Questions
+
+### Is resumebuild.cv free?
+Yes, you can create and download one resume completely free. The free plan includes AI optimization, ATS checking, and PDF export. Premium features like unlimited resumes, cover letter generation, and expert review are available on paid plans.
+
+### How does the AI resume optimization work?
+The AI analyzes your resume content and compares it against thousands of successful resumes. It identifies weak bullet points, suggests improvements using action verbs and quantified achievements, and ensures your content is optimized for both human recruiters and ATS systems.
+
+### Will my resume pass ATS (Applicant Tracking Systems)?
+Absolutely. Every resume created with our tool is designed to be ATS-compatible. We test against 50+ popular ATS systems and ensure proper formatting, keyword optimization, and structure that automated systems can easily parse.
+
+### Can I import my LinkedIn profile?
+Yes, you can import your LinkedIn profile with one click. We'll extract your experience, education, and skills, then help you optimize the content for a professional resume format.
+
+### How is my data protected?
+Your privacy is our priority. All data is encrypted in transit and at rest. We never share your personal information with third parties, and you can delete your account and all associated data at any time with one click.
+
+### Can I create multiple versions of my resume?
+Yes! With our Pro plan, you can create unlimited resume versions tailored for different job applications. Each version is saved separately, making it easy to track which resume you sent to which employer.
+
+### Can I edit the resume after AI generation?
+Yes, you can switch between chat mode and form mode to make detailed edits. All content is fully editable, and you can refine it as much as needed.
+
+### Is my resume data private by default?
+Yes, all resume data is private by default. You have the option to make resumes public for portfolio sharing, but this is entirely optional and controlled by you.
+
+## Data Privacy & Security
+
+- **GDPR Compliant**: Full compliance with European data protection regulations
+- **CCPA Compliant**: California consumer privacy rights respected
+- **Encryption**: All data encrypted in transit (HTTPS) and at rest
+- **No Third-Party Sharing**: User data never shared with external parties
+- **User-Controlled Deletion**: Complete account and data deletion available anytime
+- **Transparent Privacy Policy**: Clear explanation of data practices available at /privacy
+
+## Accessibility
+
+- WCAG 2.1 Level AA compliant
+- Screen reader compatible
+- Keyboard navigation supported
+- High contrast mode available
+- Responsive design for all devices
+
+## Browser Support
+
+- Chrome (latest 2 versions)
+- Firefox (latest 2 versions)
+- Safari (latest 2 versions)
+- Edge (latest 2 versions)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## Contact & Support
+
+- **Website**: https://resumebuild.cv
+- **Privacy Policy**: https://resumebuild.cv/privacy
+- **Support Email**: privacy@resumebuild.cv
+
+## Related Topics
+
+- Resume writing best practices
+- ATS optimization techniques
+- Career development strategies
+- Job application processes
+- Professional branding
+- Interview preparation
+- Cover letter writing
+- LinkedIn profile optimization
+
+---
+
+*This document is designed for AI/LLM retrieval systems to understand resumebuild.cv's purpose, features, and value proposition.*
