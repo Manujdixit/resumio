@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-//this is optional thats why agent is updating only one field at a time 
+//this is optional thats why agent is updating only one field at a time
 const personalInfoSchema = z.object({
 	fullName: z.string().optional(),
 	email: z.string().optional(),
@@ -15,16 +15,18 @@ const summarySchema = z.string();
 
 const experienceSchema = z.array(
 	z.object({
+		id: z.string(),
 		company: z.string(),
 		role: z.string(),
 		startDate: z.string(),
 		endDate: z.string().optional(),
-		description: z.string(),
+		description: z.array(z.string()),
 	}),
 );
 
 const educationSchema = z.array(
 	z.object({
+		id: z.string(),
 		institution: z.string(),
 		degree: z.string(),
 		startDate: z.string(),
@@ -37,6 +39,7 @@ const skillsSchema = z.array(z.string());
 
 const projectsSchema = z.array(
 	z.object({
+		id: z.string(),
 		name: z.string(),
 		description: z.string(),
 		tech: z.array(z.string()),

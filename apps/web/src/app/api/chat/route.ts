@@ -194,7 +194,8 @@ export async function POST(req: Request) {
 									// &&  "title" in part.input
 								) {
 									try {
-										const { personalInfo, ...otherUpdates } = part.input as Partial<ResumeType>;
+										const { personalInfo, ...otherUpdates } =
+											part.input as Partial<ResumeType>;
 										currentResume = {
 											...currentResume,
 											...otherUpdates,
@@ -203,7 +204,6 @@ export async function POST(req: Request) {
 												...(personalInfo ?? {}),
 											},
 										};
-										
 
 										await db
 											.update(schema.resume)

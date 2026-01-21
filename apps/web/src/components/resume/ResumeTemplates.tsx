@@ -152,7 +152,12 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
 								</p>
 							</div>
 							<div className="mt-2 text-sm">
-								{exp.description.split("\n").map((line, i) => (
+								{(Array.isArray(exp.description)
+									? exp.description
+									: exp.description
+										? [exp.description]
+										: []
+								).map((line, i) => (
 									<div key={i} className="mb-1 flex items-start">
 										<span className="mr-2">•</span>
 										<span>{line}</span>
@@ -305,7 +310,12 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
 										</span>
 									</div>
 									<ul className="ml-4 list-outside list-disc space-y-1 text-gray-700 text-sm">
-										{exp.description.split("\n").map((line, i) => (
+										{(Array.isArray(exp.description)
+											? exp.description
+											: exp.description
+												? [exp.description]
+												: []
+										).map((line, i) => (
 											<li key={i}>{line}</li>
 										))}
 									</ul>
@@ -443,7 +453,12 @@ export const MinimalTemplate = ({ data }: { data: ResumeType }) => {
 											{exp.role}
 										</div>
 										<ul className="ml-4 list-disc space-y-1 text-[#444] text-sm">
-											{exp.description.split("\n").map((line, i) => (
+											{(Array.isArray(exp.description)
+												? exp.description
+												: exp.description
+													? [exp.description]
+													: []
+											).map((line, i) => (
 												<li key={i}>{line}</li>
 											))}
 										</ul>

@@ -37,6 +37,10 @@ import {
 	SourcesTrigger,
 } from "@/components/ai-elements/sources";
 import { cn } from "@/lib/utils";
+import {
+	generatePromptForAction,
+	useAiActionStore,
+} from "@/store/useAiActionStore";
 import { useResumeStore } from "@/store/useResumeStore";
 import { Shimmer } from "../ai-elements/shimmer";
 
@@ -50,6 +54,7 @@ const Chat = ({
 	const [input, setInput] = useState("");
 	const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 	const { resumeData, updateContent, updateTitle } = useResumeStore();
+	const { pendingAction, clearPendingAction } = useAiActionStore();
 	const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const pendingMessageSent = useRef(false);
 
@@ -113,6 +118,34 @@ const Chat = ({
 			);
 		}
 	}, [resumeId, isLoadingHistory, resumeData?.content, sendMessage]);
+
+	// Handle pending AI actions from PDF selection
+	useEffect(() => {
+		if (pendingAction) {
+			const prompt = generatePromptForAction(pendingAction);
+
+			if (pendingAction.type === "custom") {
+				setInput(prompt);
+			} else {
+				(sendMessage as any)(
+					{ text: prompt },
+					{
+						body: {
+							currentResumeState: resumeData?.content,
+							resumeId,
+						},
+					},
+				);
+			}
+			clearPendingAction();
+		}
+	}, [
+		pendingAction,
+		clearPendingAction,
+		resumeData?.content,
+		resumeId,
+		sendMessage,
+	]);
 
 	// Save messages when they change (debounced)
 	useEffect(() => {

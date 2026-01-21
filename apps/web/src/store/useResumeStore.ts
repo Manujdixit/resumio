@@ -2,6 +2,8 @@ import type { schema } from "@resumio/db";
 import { create } from "zustand";
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
 
+export type { ResumeType };
+
 export type TemplateId = "modern" | "sidebar" | "minimal";
 
 export type ResumeEntity = typeof schema.resume.$inferSelect;
@@ -23,28 +25,28 @@ export const useResumeStore = create<ResumeStore>((set) => ({
 	resetResumeData: () => set({ resumeData: null }),
 	setSelectedTemplate: (template) => set({ selectedTemplate: template }),
 	updateContent: (updates: ResumeType) =>
-        set((state) => {
-            if (!state.resumeData) {
-                return { resumeData: null };
-            }
+		set((state) => {
+			if (!state.resumeData) {
+				return { resumeData: null };
+			}
 
-            const currentContent = (state.resumeData.content as ResumeType) ?? {};
-            const { personalInfo, ...otherUpdates } = updates;
+			const currentContent = (state.resumeData.content as ResumeType) ?? {};
+			const { personalInfo, ...otherUpdates } = updates;
 
-            return {
-                resumeData: {
-                    ...state.resumeData,
-                    content: {
-                        ...currentContent,
-                        ...otherUpdates,
-                        personalInfo: {
-                            ...(currentContent.personalInfo ?? {}),
-                            ...(personalInfo ?? {}),
-                        },
-                    },
-                },
-            };
-        }),
+			return {
+				resumeData: {
+					...state.resumeData,
+					content: {
+						...currentContent,
+						...otherUpdates,
+						personalInfo: {
+							...(currentContent.personalInfo ?? {}),
+							...(personalInfo ?? {}),
+						},
+					},
+				},
+			};
+		}),
 	updateTitle: (title: string) =>
 		set((state) => ({
 			resumeData: state.resumeData
