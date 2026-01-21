@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { useResumeStore } from "@/store/useResumeStore";
 
-interface Resume {
+export interface Resume {
 	id: string;
 	title: string;
 	updatedAt: string;
@@ -62,7 +62,7 @@ export function useResumes() {
 export function useCreateResume() {
 	const queryClient = useQueryClient();
 
-	return useMutation({
+	return useMutation<Resume, Error, string>({
 		mutationFn: async (title = "Untitled Resume") => {
 			const res = await fetch("/api/resumes", {
 				method: "POST",
