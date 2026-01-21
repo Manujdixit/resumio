@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
+import { Document as PDFDocument } from "@react-pdf/renderer";
 import { Button } from "@/components/ui/button";
 import {
 	ContextMenu,
@@ -33,7 +34,7 @@ export default function PdfResumePreview() {
 		document: resumeData?.content ? (
 			getPdfTemplate(selectedTemplate, resumeData.content as ResumeType)
 		) : (
-			<></>
+			<Document />
 		),
 	});
 
