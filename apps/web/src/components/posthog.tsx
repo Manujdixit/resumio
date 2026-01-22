@@ -11,7 +11,9 @@ if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
 			process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
 		person_profiles: "identified_only",
 		capture_pageview: false, // We capture manually below
-		capture_pageleave: true,
+		capture_pageleave: false,
+		autocapture: false,
+		disable_session_recording: true,
 	});
 }
 
