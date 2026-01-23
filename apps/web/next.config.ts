@@ -10,6 +10,19 @@ const nextConfig: NextConfig = {
 	typedRoutes: true,
 	reactCompiler: true,
 	serverExternalPackages: ["better-auth"],
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "**",
+			},
+		],
+	},
+	logging: {
+		fetches: {
+			fullUrl: true,
+		},
+	},
 	webpack: (config) => {
 		config.resolve.alias.canvas = false;
 		return config;
