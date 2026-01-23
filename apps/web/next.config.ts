@@ -1,3 +1,4 @@
+import withBundleAnalyzer from "@next/bundle-analyzer";
 import { withSentryConfig } from "@sentry/nextjs";
 import dotenv from "dotenv";
 import type { NextConfig } from "next";
@@ -8,13 +9,18 @@ dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 const nextConfig: NextConfig = {
 	typedRoutes: true,
 	reactCompiler: true,
+	serverExternalPackages: ["better-auth"],
 	webpack: (config) => {
 		config.resolve.alias.canvas = false;
 		return config;
 	},
 };
 
-export default withSentryConfig(nextConfig, {
+const withAnalyzer = withBundleAnalyzer({
+	enabled: process.env.ANALYZE === "true",
+});
+
+export default withSentryConfig(withAnalyzer(nextConfig), {
 	// Sentry organization and project
 	org: process.env.SENTRY_ORG,
 	project: process.env.SENTRY_PROJECT,
