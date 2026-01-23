@@ -1,5 +1,13 @@
 // import { polar, checkout, portal } from "@polar-sh/better-auth";
 // import { polarClient } from "./lib/payments";
+import { config } from "dotenv";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+// Load environment variables from the monorepo root
+const __dirname = dirname(fileURLToPath(import.meta.url));
+config({ path: resolve(__dirname, "../../../.env") });
+
 import { db } from "@resumio/db";
 import * as schema from "@resumio/db/schema/auth";
 import { type BetterAuthOptions, betterAuth } from "better-auth";
