@@ -100,7 +100,7 @@ export default function ChatPage({
 				<ResizablePanel className="flex h-full min-w-0 flex-col">
 					{/* Editor Header */}
 					<div className="shrink-0">
-						<div className="relative flex h-12 items-center justify-between bg-background px-8">
+						<div className="relative flex h-12 items-center justify-between bg-background px-4 md:px-8">
 							<div className="flex items-center gap-4">
 								<h1 className="truncate font-medium text-foreground text-sm">
 									{resumeData?.title || "Untitled Resume"}
