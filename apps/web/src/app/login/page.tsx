@@ -1,4 +1,7 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import Loader from "@/components/loader";
 
 import dynamic from "next/dynamic";
 
@@ -7,5 +10,12 @@ const SignInForm = dynamic(() => import("@/components/sign-in-form"), {
 });
 
 export default function LoginPage() {
-	return <SignInForm />;
+	const { data: session } = authClient.useSession();
+	const router = useRouter();
+	if (session?.user) {
+		router.push("/dashboard");
+		return <Loader />;
+	} else {
+		return <SignInForm />;
+	}
 }
