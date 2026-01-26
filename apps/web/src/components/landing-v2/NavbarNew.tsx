@@ -27,6 +27,12 @@ export const NavbarNew: React.FC = () => {
 							{item}
 						</Link>
 					))}
+					<Link
+						href="/blog"
+						className="text-gray-600 text-sm transition-colors hover:text-gray-900"
+					>
+						Blog
+					</Link>
 				</div>
 
 				{/* Actions */}

@@ -4,7 +4,10 @@ import { ModeToggle } from "./mode-toggle";
 import UserMenu from "./user-menu";
 
 export default function Header() {
-	const links = [{ to: "/", label: "resumebuild.cv" }] as const;
+	const links = [
+		{ to: "/", label: "resumebuild.cv" },
+		{ to: "/blog", label: "Blog" },
+	] as const;
 
 	return (
 		<div>

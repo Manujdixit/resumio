@@ -30,7 +30,12 @@
 		"db:start": "turbo -F @resumio/db db:start",
 		"db:watch": "turbo -F @resumio/db db:watch",
 		"db:stop": "turbo -F @resumio/db db:stop",
-		"db:down": "turbo -F @resumio/db db:down"
+		"db:down": "turbo -F @resumio/db db:down",
+		"blog:generate": "bun run --filter blog-agents generate",
+		"blog:topics": "bun run --filter blog-agents topics",
+		"blog:review": "bun run --filter blog-agents review",
+		"blog:publish": "bun run --filter blog-agents publish",
+		"blog:studio": "bun run --filter blog-agents studio"
 	},
 	"dependencies": {
 		"dotenv": "^17.2.2",

@@ -149,9 +149,9 @@ Yes, all resume data is private by default. You have the option to make resumes 
 
 ## Contact & Support
 
-- **Website**: https://resumebuild.cv
-- **Privacy Policy**: https://resumebuild.cv/privacy
-- **Support Email**: privacy@resumebuild.cv
+- **Website**: https://www.resumebuild.cv
+- **Privacy Policy**: https://www.resumebuild.cv/privacy
+- **Support Email**: resumebuildcv@gmail.com
 
 ## Related Topics
 

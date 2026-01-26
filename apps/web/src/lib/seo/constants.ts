@@ -2,7 +2,7 @@
  * Site-wide SEO constants
  */
 
-export const SITE_URL = "https://resumebuild.cv";
+export const SITE_URL = "https://www.resumebuild.cv";
 export const SITE_NAME = "resumebuild.cv";
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 

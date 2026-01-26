@@ -78,9 +78,9 @@ Third-Party-Sharing: None (explicitly stated in privacy policy)
 Data-Retention: User-controlled deletion
 
 # === CONTACT ===
-Support-Email: privacy@resumebuild.cv
-Website: https://resumebuild.cv
-Privacy-Policy: https://resumebuild.cv/privacy
+Support-Email: resumebuildcv@gmail.com
+Website: https://www.resumebuild.cv
+Privacy-Policy: https://www.resumebuild.cv/privacy
 
 # === VERSION ===
 Last-Updated: 2025-01-21

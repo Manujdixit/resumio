@@ -195,10 +195,10 @@ export default function PrivacyPolicyPage() {
 									If you have any questions about this Privacy Policy, please
 									contact us at{" "}
 									<a
-										href="mailto:privacy@resumebuild.cv"
+										href="mailto:resumebuildcv@gmail.com"
 										className="text-indigo-400 underline hover:text-indigo-300"
 									>
-										privacy@resumebuild.cv
+										resumebuildcv@gmail.com
 									</a>
 								</p>
 							</section>

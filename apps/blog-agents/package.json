@@ -1,0 +1,37 @@
+{
+  "name": "blog-agents",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "blog": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "studio": "bun run --env-file=../../.env mastra dev",
+    "generate": "bun run --env-file=../../.env src/index.ts generate",
+    "topics": "bun run --env-file=../../.env src/index.ts topics",
+    "review": "bun run --env-file=../../.env src/index.ts review",
+    "publish": "bun run --env-file=../../.env src/index.ts publish"
+  },
+  "dependencies": {
+    "@ai-sdk/gateway": "^3.0.22",
+    "@ai-sdk/openai": "^3.0.18",
+    "@mastra/core": "^1.0.4",
+    "@mastra/memory": "^1.0.0",
+    "@mastra/pg": "^1.0.0",
+    "@resumio/db": "workspace:*",
+    "@tavily/core": "^0.7.1",
+    "ai": "^6.0.0",
+    "commander": "^14.0.0",
+    "drizzle-orm": "^0.44.2",
+    "nanoid": "^5.1.6",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@resumio/config": "workspace:*",
+    "@types/node": "^22.13.11",
+    "mastra": "^1.0.1",
+    "typescript": "^5.8.3"
+  }
+}

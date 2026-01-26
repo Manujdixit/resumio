@@ -49,3 +49,6 @@ coverage
 tmp
 temp
 tiger-cloud-reusmio-credentials.txt
+
+# Mastra
+.mastra
