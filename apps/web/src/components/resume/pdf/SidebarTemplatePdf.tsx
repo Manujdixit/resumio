@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "@react-pdf/renderer";
-import type { ResumeType } from "@/app/schemas/ResumeSchema";
+import type { ResumeType } from "@/lib/schemas/ResumeSchema";
 
 // Create styles for sidebar template
 const styles = StyleSheet.create({

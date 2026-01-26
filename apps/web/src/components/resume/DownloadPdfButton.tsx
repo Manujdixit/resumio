@@ -3,9 +3,9 @@
 import { usePDF } from "@react-pdf/renderer";
 import { Download, Loader2 } from "lucide-react";
 import { useEffect } from "react";
-import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import { getPdfTemplate } from "@/components/resume/templateUtils";
 import { Button } from "@/components/ui/button";
+import type { ResumeType } from "@/lib/schemas/ResumeSchema";
 
 interface DownloadPdfButtonProps {
   data: ResumeType;

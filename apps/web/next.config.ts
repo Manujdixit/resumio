@@ -38,6 +38,9 @@ export default withSentryConfig(withAnalyzer(nextConfig), {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
 
+  // Sentry auth token
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+
   // Suppress Sentry source map upload logs during build
   silent: !process.env.CI,
 

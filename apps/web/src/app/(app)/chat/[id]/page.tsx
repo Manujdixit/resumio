@@ -4,7 +4,6 @@ import { CheckCircle2, Loader2, Share2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { use, useState } from "react";
 import { toast } from "sonner";
-import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import Chat from "@/components/chat/Chat";
 import {
   type EditorMode,
@@ -19,6 +18,7 @@ import {
 } from "@/components/ui/resizable";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useResume, useUpdateResume } from "@/hooks/use-resumes";
+import type { ResumeType } from "@/lib/schemas/ResumeSchema";
 import { useResumeStore } from "@/store/useResumeStore";
 
 const PdfResumePreview = dynamic(

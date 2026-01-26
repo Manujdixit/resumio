@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "Expert advice on resume writing, job search strategies, and career development. Get the latest tips to land your dream job.",
 };
 
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 3600;
 
 export default async function BlogHubPage() {
   // Fetch latest posts
