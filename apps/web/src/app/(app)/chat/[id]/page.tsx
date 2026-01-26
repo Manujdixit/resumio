@@ -2,7 +2,7 @@
 
 import { CheckCircle2, Loader2, Share2 } from "lucide-react";
 import dynamic from "next/dynamic";
-import { use, useRef, useState } from "react";
+import { use, useState } from "react";
 import { toast } from "sonner";
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import Chat from "@/components/chat/Chat";

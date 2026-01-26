@@ -1,7 +1,6 @@
 "use client";
 
 import { Loader2, Save } from "lucide-react";
-import { useState } from "react";
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

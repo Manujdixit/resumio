@@ -233,6 +233,7 @@ export function ExperienceForm({
               <div className="space-y-2">
                 {(experience.description || []).map((point, pointIndex) => (
                   <div
+                    // biome-ignore lint/suspicious/noArrayIndexKey: description points are simple strings
                     key={`point-${index}-${pointIndex}`}
                     className="flex gap-2"
                   >

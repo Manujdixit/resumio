@@ -1,13 +1,11 @@
 "use client";
 
-import { Loader2, Plus, Save, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Loader2, Save } from "lucide-react";
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 
 interface PersonalInfoFormProps {
   data: ResumeType["personalInfo"];

@@ -15,7 +15,7 @@ export function getRelatedPages(
  * Get sibling pages (same parent)
  */
 export function getSiblingPages(
-  parentSlug: string,
+  _parentSlug: string,
   allPages: RelatedPage[],
   currentSlug: string,
   limit = 4,

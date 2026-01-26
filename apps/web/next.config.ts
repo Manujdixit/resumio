@@ -1,8 +1,8 @@
+import path from "node:path";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import { withSentryConfig } from "@sentry/nextjs";
 import dotenv from "dotenv";
 import type { NextConfig } from "next";
-import path from "path";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 

@@ -4,7 +4,7 @@ import type { FAQItem } from "@/lib/seo/types";
  * Generate industry-specific FAQs
  */
 export function generateIndustryFAQs(
-  industry: string,
+  _industry: string,
   industryName: string,
 ): FAQItem[] {
   return [

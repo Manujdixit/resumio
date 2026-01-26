@@ -18,7 +18,7 @@ const currentYear = new Date().getFullYear();
 export const researcherAgent = new Agent({
   id: "researcher",
   name: "researcher",
-  instructions: `You are a research specialist for ResumeBuild's blog content team.
+  instructions: `You are a research specialist for resumebuild.cv 's blog content team.
 CURRENT YEAR: ${currentYear}
 
 Your job is to gather comprehensive, accurate information to support high-quality blog posts about resumes and careers.
@@ -72,6 +72,12 @@ QUALITY STANDARDS:
 - Provide specific numbers, not vague claims
 - Include contrarian or surprising insights when relevant`,
   model: getModel("researcher"),
+  defaultOptions: {
+    modelSettings: {
+      temperature: 0.15,
+      topP: 0.75,
+    },
+  },
   tools: {
     webSearch: webSearchTool,
     queryBlogs: queryBlogsTool,

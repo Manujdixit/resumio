@@ -39,6 +39,12 @@ export const queryBlogsTool = createTool({
       .default("published")
       .describe("Filter by post status"),
     categorySlug: z.string().optional().describe("Filter by category slug"),
+    similarityThreshold: z
+      .number()
+      .min(0)
+      .max(1)
+      .optional()
+      .describe("Maximum cosine distance (0-1). Lower means more similar."),
     limit: z
       .number()
       .min(1)
@@ -58,6 +64,7 @@ export const queryBlogsTool = createTool({
         status: z.string(),
         publishedAt: z.string().nullable(),
         wordCount: z.number().nullable(),
+        similarity: z.number().optional(),
       }),
     ),
     totalCount: z.number(),
@@ -67,12 +74,14 @@ export const queryBlogsTool = createTool({
       query: context.query,
       status: context.status,
       categorySlug: context.categorySlug,
+      similarityThreshold: context.similarityThreshold,
     });
 
-    const { query, status, categorySlug, limit } = context;
+    const { query, status, categorySlug, similarityThreshold, limit } = context;
 
     // Build conditions
-    const conditions = [];
+    // biome-ignore lint/suspicious/noExplicitAny: Drizzle conditions can be complex
+    const conditions: any[] = [];
 
     // Status filter
     if (status && status !== "all") {
@@ -91,7 +100,7 @@ export const queryBlogsTool = createTool({
 
     // Search query logic
     let similarityColumn = sql<number>`0`;
-    let orderByClause: any = [desc(schema.blogPost.publishedAt)];
+    let orderByClause: SQL[] = [desc(schema.blogPost.publishedAt)];
 
     if (query) {
       try {
@@ -106,8 +115,10 @@ export const queryBlogsTool = createTool({
         // Order by relevance (distance ASC)
         orderByClause = [similarityColumn];
 
-        // Filter for relevance (distance < 0.5 implies decent similarity)
-        // conditions.push(lt(similarityColumn, 0.5));
+        // Filter for relevance if threshold is provided
+        if (similarityThreshold !== undefined) {
+          conditions.push(sql`${similarityColumn} <= ${similarityThreshold}`);
+        }
       } catch (error) {
         console.error("Vector search failed, falling back to LIKE:", error);
         // Fallback to LIKE if embedding fails

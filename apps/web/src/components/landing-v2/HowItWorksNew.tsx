@@ -40,9 +40,9 @@ export const HowItWorksNew: React.FC = () => {
         </div>
 
         <div className="grid gap-8 md:grid-cols-3">
-          {steps.map((step, index) => (
+          {steps.map((step, _index) => (
             <div
-              key={index}
+              key={step.title}
               className="rounded-2xl bg-white p-8 shadow-sm transition-shadow hover:shadow-md"
             >
               <div className="mb-6 inline-flex items-center justify-center rounded-full bg-gray-100 px-3 py-1 font-medium text-gray-600 text-sm">

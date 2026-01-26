@@ -6,6 +6,7 @@ import { publisherAgent } from "../agents/publisher.js";
 import { researcherAgent } from "../agents/researcher.js";
 import { seoStrategistAgent } from "../agents/seo-strategist.js";
 import { topicFinderAgent } from "../agents/topic-finder.js";
+import { queryBlogsTool } from "../tools/query-blogs.js";
 
 // --- STEPS ---
 
@@ -40,7 +41,7 @@ const topicDiscoveryStep = createStep({
   },
 });
 
-// 2. Topic Validation
+// 2. Topic Validation + Similarity Gate + Pivot (All-in-one to avoid complex branching types)
 const topicValidationStep = createStep({
   id: "topic-validation",
   inputSchema: z.object({
@@ -53,8 +54,52 @@ const topicValidationStep = createStep({
     dryRun: z.boolean().optional(),
   }),
   execute: async ({ inputData }) => {
-    const { topic, dryRun } = inputData;
-    console.log("📋 [Workflow] Validating topic...");
+    let { topic } = inputData;
+    const { dryRun } = inputData;
+
+    console.log(`🛡️ [Workflow] Checking similarity for: "${topic}"`);
+
+    // Tools should be called via their run or execute method
+    // In Mastra, they are often registered on the agent or called directly
+    // Using direct execution with the correct context structure
+    // biome-ignore lint/suspicious/noExplicitAny: Mastra tool execution types can be tricky
+    const simResult = await (queryBlogsTool as any).execute({
+      context: {
+        query: topic,
+        similarityThreshold: 0.15,
+        limit: 1,
+      },
+    });
+
+    // biome-ignore lint/suspicious/noExplicitAny: result structure varies
+    const posts = (simResult as any)?.posts || [];
+
+    // 2. Pivot if needed
+    if (posts.length > 0) {
+      const conflict = posts[0];
+      console.warn(
+        `⚠️ [Workflow] Similarity Conflict! "${topic}" is too similar to "${conflict.title}" (Score: ${conflict.similarity?.toFixed(4)})`,
+      );
+      console.log(
+        `🔄 [Workflow] Pivoting topic away from: "${conflict.title}"`,
+      );
+
+      const pivotResult = await topicFinderAgent.generate(
+        `Your previous topic suggestion "${topic}" was rejected because it is too similar to an existing post: "${conflict.title}".
+        
+        Please suggest a NEW, 100% unique angle or a more specific sub-topic that provides different value to the reader.
+        
+        IMPORTANT: Return ONLY the new topic title. Do not include explanation or quotes.`,
+      );
+
+      topic = pivotResult.text.trim().replace(/^"|"$/g, "");
+      console.log(`✨ [Workflow] New pivoted topic: "${topic}"`);
+    }
+
+    // 3. Generate Brief
+    console.log(
+      `📋 [Workflow] Validating topic & generating brief: "${topic}"`,
+    );
     const result = await topicFinderAgent.generate(
       `Validate and create a topic brief for: "${topic}"
             

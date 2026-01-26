@@ -56,9 +56,9 @@ export const FeaturesNew: React.FC = () => {
         </div>
 
         <div className="space-y-32">
-          {features.map((feature, index) => (
+          {features.map((feature, _index) => (
             <div
-              key={index}
+              key={feature.title}
               className={`flex flex-col ${
                 feature.imagePosition === "left"
                   ? "lg:flex-row-reverse"

@@ -1,13 +1,12 @@
 "use client";
 
-import { Loader2, Plus, Save, Trash2, X } from "lucide-react";
+import { Loader2, Plus, Save, X } from "lucide-react";
 import { useState } from "react";
 
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 interface SkillsFormProps {
   data: ResumeType["skills"];

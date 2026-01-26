@@ -47,9 +47,9 @@ export const Testimonials: React.FC = () => {
         </div>
 
         <div className="grid gap-8 md:grid-cols-3">
-          {testimonials.map((testimonial, index) => (
+          {testimonials.map((testimonial, _index) => (
             <div
-              key={index}
+              key={testimonial.name}
               className="group overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow hover:shadow-lg"
             >
               {/* Image Header */}

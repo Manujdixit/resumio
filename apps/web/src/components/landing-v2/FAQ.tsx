@@ -74,7 +74,7 @@ export const FAQ: React.FC = () => {
         <div className="space-y-4">
           {faqs.map((faq, index) => (
             <div
-              key={`faq-${index}`}
+              key={faq.question}
               className="overflow-hidden rounded-xl border border-gray-100 bg-white"
             >
               <button

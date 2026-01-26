@@ -13,10 +13,7 @@ import {
   manageCategoriesToolTool,
   queryBlogsTool,
 } from "../tools/index.js";
-import { blogPostWorkflow } from "../workflows/blog-post.js";
-
-// Import sub-agents
-// import { topicFinderAgent } from "./topic-finder.js"; // Unused
+import { blogPostWorkflow } from "../workflows/index.js";
 
 /**
  * Blog Orchestrator - a helper agent for high-level coordination
@@ -25,10 +22,15 @@ import { blogPostWorkflow } from "../workflows/blog-post.js";
 export const orchestratorAgent = new Agent({
   id: "blog-orchestrator",
   name: "blog-orchestrator",
-  instructions: `You are the blog content orchestrator for ResumeBuild.
+  instructions: `You are the blog content orchestrator for resumebuild.cv.
 Your job is to help coordinate and plan blog content creation.
 You can query existing blogs and help with high-level decisions.`,
   model: getModel("orchestrator"),
+  defaultOptions: {
+    modelSettings: {
+      temperature: 0.1,
+    },
+  },
   tools: {
     queryBlogs: queryBlogsTool,
     getInternalLinks: getInternalLinksTool,
@@ -71,68 +73,30 @@ export async function runBlogPipeline(
   log(`🔧 Mode: ${dryRun ? "Dry Run" : "Live"}\n`);
 
   try {
-    // createRun is async in Mastra v1? The type check says so.
-    // It returns Promise<Run>
-    // Run object has runId and start()
-    const workflowRun = blogPostWorkflow.createRun();
-
-    // If it's a promise, we should await it?
-    // But type error said: Property 'runId' does not exist on type 'Promise<Run...>'
-    // So yes, it is a promise.
-
-    // Wait, if createRun() returns a Promise, I cannot destructure immediately.
-    // But in the code I saw: const { runId, start } = blogPostWorkflow.createRun();
-
-    // Let's assume we need to await it?
-    // Actually, standard Mastra v1 might be synchronous createRun but returns an object that has async methods?
-    // But the error is explicit: "Property 'runId' does not exist on type 'Promise<...>'"
-
-    // So I MUST await it if the library defines it as async.
-
-    // However, I suspect createRun() returns a Run object directly in some versions.
-    // Let's try awaiting it.
-
-    // BUT wait! I am editing the file.
-    // I will change it to await.
-
-    // Wait, if I change it to await, I need to know if createRun returns a Promise.
-    // The error confirms it returns a Promise.
-
-    const { runId, start } = blogPostWorkflow.createRun();
-    // If this line caused the error, then createRun IS async?
-    // Or maybe createRun returns { runId, start } but TS thinks it's a Promise?
-
-    // Let's try `await blogPostWorkflow.createRun()`.
-
-    /* 
-		   Wait, look at context7 examples.
-		   const result = await userWorkflow.execute({ triggerData: ... });
-		   
-		   It doesn't use createRun().
-		   
-		   I used createRun() because I wanted runId.
-		   
-		   If I use .execute(), I get result.
-		   Does result have runId?
-		   
-		   "const run = await userWorkflow.execute({...}); if (run.status...) const resumed = await userWorkflow.resume(run.runId...)"
-		   
-		   So `execute()` returns the Run object (or result with runId).
-		*/
-
-    // So I should use .execute() directly!
-
-    const result = await blogPostWorkflow.execute({
-      triggerData: {
+    // Execute the workflow directly
+    const run = await blogPostWorkflow.createRun();
+    const result = await run.start({
+      inputData: {
         topic: topic || undefined,
         dryRun,
       },
     });
 
-    console.log(`▶️ Workflow Run ID: ${result.runId}`); // execute returns Run
+    if (!result || result.status !== "success") {
+      const status = result?.status;
+      const errorMsg =
+        status === "failed"
+          ? result.error?.message
+          : status === "tripwire"
+            ? "Workflow hit a tripwire"
+            : status === "suspended"
+              ? "Workflow suspended"
+              : `Workflow ended with status: ${status}`;
+      throw new Error(`Workflow execution failed: ${errorMsg}`);
+    }
 
-    // result.results contains the output steps
-    const publishResult = result.results.publish;
+    // result.result contains the output defined in outputSchema on success
+    const { status: workflowStatus, postUrl } = result.result;
 
     if (dryRun) {
       return {
@@ -141,18 +105,15 @@ export async function runBlogPipeline(
       };
     }
 
-    if (publishResult) {
-      const { status, postUrl } = publishResult;
-      log("\n" + "━".repeat(50));
-      log(`✅ Workflow Completed. Status: ${status}`);
+    if (workflowStatus) {
+      log(`\n${"━".repeat(50)}`);
+      log(`✅ Workflow Completed. Status: ${workflowStatus}`);
       if (postUrl) log(`🔗 URL: ${postUrl}`);
 
       return {
         success: true,
-        status,
+        status: workflowStatus,
         postUrl,
-        // Quality score is in review step output, but hard to access if only final output returned?
-        // We can rely on logs for now.
       };
     }
 

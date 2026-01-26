@@ -16,7 +16,7 @@ import { saveBlogTool } from "../tools/save-blog.js";
 export const publisherAgent = new Agent({
   id: "publisher",
   name: "publisher",
-  instructions: `You are the publisher for ResumeBuild's blog.
+  instructions: `You are the publisher for resumebuild.cv 's blog.
 
 Your job is to save finalized blog content to the database with the appropriate status.
 
@@ -78,6 +78,11 @@ After saving, report:
 - Status (published / pending_review / draft)
 - Next steps if not published`,
   model: getModel("publisher"),
+  defaultOptions: {
+    modelSettings: {
+      temperature: 0.1,
+    },
+  },
   tools: {
     saveBlog: saveBlogTool,
     manageCategories: manageCategoriesToolTool,

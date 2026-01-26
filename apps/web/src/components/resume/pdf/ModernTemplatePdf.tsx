@@ -176,7 +176,7 @@ export const ModernTemplatePdf = ({ data }: { data: ResumeType }) => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Education</Text>
             {data.education.map((edu, index) => (
-              <View key={index} style={{ marginBottom: 2 }}>
+              <View key={edu.id || `edu-${index}`} style={{ marginBottom: 2 }}>
                 <View style={styles.itemHeader}>
                   <View>
                     <Text style={styles.itemTitle}>{edu.institution}</Text>
@@ -207,7 +207,7 @@ export const ModernTemplatePdf = ({ data }: { data: ResumeType }) => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Professional Experience</Text>
             {data.experience.map((exp, index) => (
-              <View key={index} style={{ marginBottom: 2 }}>
+              <View key={exp.id || `exp-${index}`} style={{ marginBottom: 2 }}>
                 <View style={styles.itemHeader}>
                   <View>
                     <Text style={styles.itemTitle}>{exp.company}</Text>
@@ -224,7 +224,11 @@ export const ModernTemplatePdf = ({ data }: { data: ResumeType }) => {
                       ? [exp.description]
                       : []
                   ).map((line, i) => (
-                    <View key={i} style={styles.bulletPoint}>
+                    <View
+                      // biome-ignore lint/suspicious/noArrayIndexKey: lines don't have unique IDs
+                      key={`line-${i}`}
+                      style={styles.bulletPoint}
+                    >
                       <Text style={styles.bulletDot}>•</Text>
                       <Text style={styles.bulletContent}>{line}</Text>
                     </View>
@@ -240,14 +244,21 @@ export const ModernTemplatePdf = ({ data }: { data: ResumeType }) => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Projects</Text>
             {data.projects.map((project, index) => (
-              <View key={index} style={{ marginBottom: 4 }}>
+              <View
+                key={project.id || `project-${index}`}
+                style={{ marginBottom: 4 }}
+              >
                 <Text style={styles.itemTitle}>{project.name}</Text>
                 <Text style={styles.paragraph}>{project.description}</Text>
                 {project.tech && project.tech.length > 0 && (
                   <View style={styles.projectTech}>
                     <Text style={styles.techLabel}>Technologies:</Text>
                     {project.tech.map((tech, techIndex) => (
-                      <Text key={techIndex} style={styles.techItem}>
+                      <Text
+                        // biome-ignore lint/suspicious/noArrayIndexKey: tech items are simple strings
+                        key={`tech-${techIndex}`}
+                        style={styles.techItem}
+                      >
                         {tech}
                         {techIndex < project.tech.length - 1 ? "," : ""}
                       </Text>

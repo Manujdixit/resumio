@@ -3,7 +3,6 @@
 import { Bot, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useResumeStore } from "@/store/useResumeStore";
 
 export type EditorMode = "chat" | "form";
 
