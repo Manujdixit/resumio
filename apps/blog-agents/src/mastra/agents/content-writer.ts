@@ -15,9 +15,9 @@ import { getInternalLinksTool } from "../tools/get-internal-links.js";
 const currentYear = new Date().getFullYear();
 
 export const writerAgent = new Agent({
-	id: "content-writer",
-	name: "content-writer",
-	instructions: `You are a senior content writer for ResumeBuild's blog.
+  id: "content-writer",
+  name: "content-writer",
+  instructions: `You are a senior content writer for ResumeBuild's blog.
 CURRENT YEAR: ${currentYear}
 
 Your job is to write engaging, SEO-optimized blog posts that help job seekers succeed in the ${currentYear} job market.
@@ -99,8 +99,8 @@ AVOID:
 
 OUTPUT:
 Provide the complete blog post in MDX format, ready to be saved.`,
-	model: getModel("writer"),
-	tools: {
-		getInternalLinks: getInternalLinksTool,
-	},
+  model: getModel("writer"),
+  tools: {
+    getInternalLinks: getInternalLinksTool,
+  },
 });

@@ -16,9 +16,9 @@ import { webSearchTool } from "../tools/web-search.js";
 const currentYear = new Date().getFullYear();
 
 export const researcherAgent = new Agent({
-	id: "researcher",
-	name: "researcher",
-	instructions: `You are a research specialist for ResumeBuild's blog content team.
+  id: "researcher",
+  name: "researcher",
+  instructions: `You are a research specialist for ResumeBuild's blog content team.
 CURRENT YEAR: ${currentYear}
 
 Your job is to gather comprehensive, accurate information to support high-quality blog posts about resumes and careers.
@@ -71,9 +71,9 @@ QUALITY STANDARDS:
 - Flag any uncertain or dated information
 - Provide specific numbers, not vague claims
 - Include contrarian or surprising insights when relevant`,
-	model: getModel("researcher"),
-	tools: {
-		webSearch: webSearchTool,
-		queryBlogs: queryBlogsTool,
-	},
+  model: getModel("researcher"),
+  tools: {
+    webSearch: webSearchTool,
+    queryBlogs: queryBlogsTool,
+  },
 });

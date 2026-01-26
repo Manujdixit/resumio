@@ -17,9 +17,9 @@ import { webSearchTool } from "../tools/web-search.js";
 const currentYear = new Date().getFullYear();
 
 export const topicFinderAgent = new Agent({
-	id: "topic-finder",
-	name: "topic-finder",
-	instructions: `You are a topic research specialist for ResumeBuild, a resume building platform.
+  id: "topic-finder",
+  name: "topic-finder",
+  instructions: `You are a topic research specialist for ResumeBuild, a resume building platform.
 CURRENT YEAR: ${currentYear}
 
 Your job is to identify and validate blog topics that will:
@@ -61,10 +61,10 @@ Return a structured topic brief with:
 - Content angle/unique value proposition
 - Suggested word count (1500-2500)
 - Key points to cover (5-7 bullet points)`,
-	model: getModel("topicFinder"),
-	tools: {
-		queryBlogs: queryBlogsTool,
-		manageCategories: manageCategoriesToolTool,
-		webSearch: webSearchTool,
-	},
+  model: getModel("topicFinder"),
+  tools: {
+    queryBlogs: queryBlogsTool,
+    manageCategories: manageCategoriesToolTool,
+    webSearch: webSearchTool,
+  },
 });

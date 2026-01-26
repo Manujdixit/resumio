@@ -14,9 +14,9 @@ import { manageCategoriesToolTool } from "../tools/manage-categories.js";
 import { saveBlogTool } from "../tools/save-blog.js";
 
 export const publisherAgent = new Agent({
-	id: "publisher",
-	name: "publisher",
-	instructions: `You are the publisher for ResumeBuild's blog.
+  id: "publisher",
+  name: "publisher",
+  instructions: `You are the publisher for ResumeBuild's blog.
 
 Your job is to save finalized blog content to the database with the appropriate status.
 
@@ -77,9 +77,9 @@ After saving, report:
 - Post URL
 - Status (published / pending_review / draft)
 - Next steps if not published`,
-	model: getModel("publisher"),
-	tools: {
-		saveBlog: saveBlogTool,
-		manageCategories: manageCategoriesToolTool,
-	},
+  model: getModel("publisher"),
+  tools: {
+    saveBlog: saveBlogTool,
+    manageCategories: manageCategoriesToolTool,
+  },
 });

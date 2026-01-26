@@ -17,9 +17,9 @@ import { getInternalLinksTool } from "../tools/get-internal-links.js";
 const currentYear = new Date().getFullYear();
 
 export const editorAgent = new Agent({
-	id: "editor",
-	name: "editor",
-	instructions: `You are a senior editor for ResumeBuild's blog.
+  id: "editor",
+  name: "editor",
+  instructions: `You are a senior editor for ResumeBuild's blog.
 CURRENT YEAR: ${currentYear}
 
 Your job is to review, score, and polish blog content before publication.
@@ -108,8 +108,8 @@ OUTPUT FORMAT:
 If APPROVE, also output:
 ### Final Content:
 [Polished MDX content with any minor fixes applied]`,
-	model: getModel("editor"),
-	tools: {
-		getInternalLinks: getInternalLinksTool,
-	},
+  model: getModel("editor"),
+  tools: {
+    getInternalLinks: getInternalLinksTool,
+  },
 });

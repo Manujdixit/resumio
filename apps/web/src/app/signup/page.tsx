@@ -1,21 +1,14 @@
-"use client";
-import { authClient } from "@/lib/auth-client";
-import Loader from "@/components/loader";
-import { useRouter } from "next/navigation";
-
+import { auth } from "@resumio/auth";
 import dynamic from "next/dynamic";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-const SignUpForm = dynamic(() => import("@/components/sign-up-form"), {
-	ssr: false,
-});
+const SignUpForm = dynamic(() => import("@/components/sign-up-form"));
 
-export default function SignupPage() {
-	const { data: session } = authClient.useSession();
-	const router = useRouter();
-	if (session?.user) {
-		router.push("/dashboard");
-		return <Loader />;
-	} else {
-		return <SignUpForm />;
-	}
+export default async function SignupPage() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (session?.user) {
+    redirect("/dashboard");
+  }
+  return <SignUpForm />;
 }

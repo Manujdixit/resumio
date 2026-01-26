@@ -18,9 +18,9 @@ import { webSearchTool } from "../tools/web-search.js";
 const currentYear = new Date().getFullYear();
 
 export const seoStrategistAgent = new Agent({
-	id: "seo-strategist",
-	name: "seo-strategist",
-	instructions: `You are an SEO strategist for ResumeBuild's blog.
+  id: "seo-strategist",
+  name: "seo-strategist",
+  instructions: `You are an SEO strategist for ResumeBuild's blog.
 CURRENT YEAR: ${currentYear}
 
 Your job is to optimize blog content for search engines while maintaining readability and user value.
@@ -96,10 +96,10 @@ Provide an SEO brief containing:
 - Schema markup recommendations
 - Featured snippet opportunities
 - Image optimization notes`,
-	model: getModel("seoStrategist"),
-	tools: {
-		getInternalLinks: getInternalLinksTool,
-		queryBlogs: queryBlogsTool,
-		webSearch: webSearchTool,
-	},
+  model: getModel("seoStrategist"),
+  tools: {
+    getInternalLinks: getInternalLinksTool,
+    queryBlogs: queryBlogsTool,
+    webSearch: webSearchTool,
+  },
 });

@@ -1,6 +1,6 @@
+import type { Route } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import type { Route } from "next";
 
 export function BlogHeader() {
   return (

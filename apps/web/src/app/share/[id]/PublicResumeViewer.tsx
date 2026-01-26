@@ -5,13 +5,13 @@ import { type ResumeEntity, useResumeStore } from "@/store/useResumeStore";
 import ResumePreview from "../../../components/resume/ResumePreview";
 
 export function PublicResumeViewer({ data }: { data: unknown }) {
-	const { setResumeData } = useResumeStore();
+  const { setResumeData } = useResumeStore();
 
-	useEffect(() => {
-		if (data) {
-			setResumeData(data as ResumeEntity);
-		}
-	}, [data, setResumeData]);
+  useEffect(() => {
+    if (data) {
+      setResumeData(data as ResumeEntity);
+    }
+  }, [data, setResumeData]);
 
-	return <ResumePreview />;
+  return <ResumePreview />;
 }
