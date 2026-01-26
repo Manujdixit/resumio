@@ -72,12 +72,14 @@ export const UseCases: React.FC = () => {
           {/* Scroll Buttons */}
           <button
             onClick={() => scroll("left")}
+            type="button"
             className="-translate-y-1/2 -translate-x-4 absolute top-1/2 left-0 z-10 flex hidden h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white shadow-md transition-colors hover:bg-gray-50 md:flex"
           >
             <ChevronLeft size={20} className="text-gray-600" />
           </button>
           <button
             onClick={() => scroll("right")}
+            type="button"
             className="-translate-y-1/2 absolute top-1/2 right-0 z-10 flex hidden h-10 w-10 translate-x-4 items-center justify-center rounded-full border border-gray-200 bg-white shadow-md transition-colors hover:bg-gray-50 md:flex"
           >
             <ChevronRight size={20} className="text-gray-600" />
@@ -89,8 +91,11 @@ export const UseCases: React.FC = () => {
             className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {useCases.map((useCase, index) => (
-              <div key={index} className="w-72 flex-shrink-0 snap-start">
+            {useCases.map((useCase, _index) => (
+              <div
+                key={useCase.title}
+                className="w-72 flex-shrink-0 snap-start"
+              >
                 <div className="group cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white transition-shadow hover:shadow-lg">
                   {/* Image placeholder */}
                   <div

@@ -39,8 +39,8 @@ export const StatsSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center">
+          {stats.map((stat, _index) => (
+            <div key={stat.label} className="text-center">
               <div
                 className={`font-bold text-5xl md:text-6xl ${stat.color} mb-2`}
               >

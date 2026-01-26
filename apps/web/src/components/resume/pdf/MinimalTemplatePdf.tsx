@@ -210,7 +210,7 @@ export const MinimalTemplatePdf = ({ data }: { data: ResumeType }) => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Work Experience</Text>
             {data.experience.map((exp, index) => (
-              <View key={index} style={{ marginBottom: 12 }}>
+              <View key={exp.id || `exp-${index}`} style={{ marginBottom: 12 }}>
                 <View style={styles.itemHeader}>
                   <View style={styles.itemDateColumn}>
                     <Text>{exp.startDate} –</Text>
@@ -226,7 +226,11 @@ export const MinimalTemplatePdf = ({ data }: { data: ResumeType }) => {
                           ? [exp.description]
                           : []
                       ).map((line, i) => (
-                        <View key={i} style={styles.bulletPoint}>
+                        <View
+                          // biome-ignore lint/suspicious/noArrayIndexKey: lines don't have unique IDs
+                          key={`line-${i}`}
+                          style={styles.bulletPoint}
+                        >
                           <Text style={styles.bulletDot}>•</Text>
                           <Text style={styles.bulletContent}>{line}</Text>
                         </View>
@@ -244,7 +248,7 @@ export const MinimalTemplatePdf = ({ data }: { data: ResumeType }) => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Education</Text>
             {data.education.map((edu, index) => (
-              <View key={index} style={{ marginBottom: 8 }}>
+              <View key={edu.id || `edu-${index}`} style={{ marginBottom: 8 }}>
                 <View style={styles.itemHeader}>
                   <View style={styles.itemDateColumn}>
                     <Text>
@@ -273,7 +277,10 @@ export const MinimalTemplatePdf = ({ data }: { data: ResumeType }) => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Projects</Text>
             {data.projects.map((project, index) => (
-              <View key={index} style={{ marginBottom: 8 }}>
+              <View
+                key={project.id || `project-${index}`}
+                style={{ marginBottom: 8 }}
+              >
                 <Text style={styles.itemTitle}>{project.name}</Text>
                 <Text style={styles.paragraph}>{project.description}</Text>
                 {project.tech && project.tech.length > 0 && (
@@ -293,7 +300,11 @@ export const MinimalTemplatePdf = ({ data }: { data: ResumeType }) => {
             <Text style={styles.sectionTitle}>Skills</Text>
             <View style={styles.skillsContainer}>
               {data.skills.map((skill, index) => (
-                <View key={index} style={styles.skillItem}>
+                <View
+                  // biome-ignore lint/suspicious/noArrayIndexKey: skills are simple strings
+                  key={`skill-${index}`}
+                  style={styles.skillItem}
+                >
                   <Text style={styles.skillBullet}>•</Text>
                   <Text>{skill}</Text>
                 </View>

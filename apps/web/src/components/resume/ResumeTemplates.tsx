@@ -101,7 +101,7 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
             Education
           </h2>
           {data.education.map((edu, index) => (
-            <div key={index} className="mb-4">
+            <div key={edu.id || `edu-${index}`} className="mb-4">
               <div className="flex items-baseline justify-between">
                 <div>
                   <p className="font-bold">{edu.institution}</p>
@@ -125,7 +125,11 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
           </h2>
           <div className="grid grid-cols-6 gap-x-4 gap-y-2 text-sm">
             {data.skills.map((skill, index) => (
-              <div key={index} className="flex items-start">
+              <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: skills are simple strings
+                key={`skill-${index}`}
+                className="flex items-start"
+              >
                 <span className="mr-2">•</span>
                 <span>{skill}</span>
               </div>
@@ -141,7 +145,7 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
             Professional Experience
           </h2>
           {data.experience.map((exp, index) => (
-            <div key={index} className="mb-4">
+            <div key={exp.id || `exp-${index}`} className="mb-4">
               <div className="mb-1 flex items-baseline justify-between">
                 <div>
                   <p className="font-bold">{exp.company}</p>
@@ -158,7 +162,11 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
                     ? [exp.description]
                     : []
                 ).map((line, i) => (
-                  <div key={i} className="mb-1 flex items-start">
+                  <div
+                    // biome-ignore lint/suspicious/noArrayIndexKey: description points are simple strings
+                    key={`line-${i}`}
+                    className="mb-1 flex items-start"
+                  >
                     <span className="mr-2">•</span>
                     <span>{line}</span>
                   </div>
@@ -176,13 +184,16 @@ export const ModernTemplate = ({ data }: { data: ResumeType }) => {
             Projects
           </h2>
           {data.projects.map((project, index) => (
-            <div key={index} className="mb-4">
+            <div key={project.id || `project-${index}`} className="mb-4">
               <p className="font-bold">{project.name}</p>
               <p className="mt-1 text-sm">{project.description}</p>
               <div className="mt-2 flex flex-wrap gap-2 text-sm">
                 <span className="font-semibold">Technologies:</span>
                 {project.tech.map((tech, techIndex) => (
-                  <span key={techIndex}>
+                  <span
+                    // biome-ignore lint/suspicious/noArrayIndexKey: tech items are simple strings
+                    key={`tech-${techIndex}`}
+                  >
                     {tech}
                     {techIndex < project.tech.length - 1 ? "," : ""}
                   </span>
@@ -207,7 +218,11 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
         <div>
           <h1 className="mb-2 font-bold text-3xl leading-tight">
             {data.personalInfo?.fullName?.split(" ").map((name, i) => (
-              <span key={i} className="block">
+              <span
+                // biome-ignore lint/suspicious/noArrayIndexKey: name parts are simple strings
+                key={`name-${i}`}
+                className="block"
+              >
                 {name}
               </span>
             )) || "Your Name"}
@@ -274,7 +289,12 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
             </h3>
             <ul className="space-y-2 text-sm">
               {data.skills.map((skill, index) => (
-                <li key={index}>• {skill}</li>
+                <li
+                  // biome-ignore lint/suspicious/noArrayIndexKey: skills are simple strings
+                  key={`skill-${index}`}
+                >
+                  • {skill}
+                </li>
               ))}
             </ul>
           </div>
@@ -301,7 +321,7 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
             </h3>
             <div className="space-y-6">
               {data.experience.map((exp, index) => (
-                <div key={index}>
+                <div key={exp.id || `exp-${index}`}>
                   <h4 className="font-bold text-gray-900">{exp.company}</h4>
                   <div className="mb-2 flex justify-between text-gray-600 text-sm">
                     <span className="italic">{exp.role}</span>
@@ -316,7 +336,12 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
                         ? [exp.description]
                         : []
                     ).map((line, i) => (
-                      <li key={i}>{line}</li>
+                      <li
+                        // biome-ignore lint/suspicious/noArrayIndexKey: description points are simple strings
+                        key={`line-${i}`}
+                      >
+                        {line}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -332,7 +357,7 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
             </h3>
             <div className="space-y-4">
               {data.education.map((edu, index) => (
-                <div key={index}>
+                <div key={edu.id || `edu-${index}`}>
                   <h4 className="font-bold text-gray-900">{edu.institution}</h4>
                   <div className="text-gray-600 text-sm">
                     <div>{edu.degree}</div>
@@ -354,7 +379,7 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
             </h3>
             <div className="space-y-6">
               {data.projects.map((project, index) => (
-                <div key={index}>
+                <div key={project.id || `project-${index}`}>
                   <h4 className="font-bold text-gray-900">{project.name}</h4>
                   <p className="mb-2 text-gray-700 text-sm">
                     {project.description}
@@ -362,7 +387,8 @@ export const SidebarTemplate = ({ data }: { data: ResumeType }) => {
                   <div className="flex flex-wrap gap-2 text-sm">
                     {project.tech.map((tech, i) => (
                       <span
-                        key={i}
+                        // biome-ignore lint/suspicious/noArrayIndexKey: tech items are simple strings
+                        key={`tech-${i}`}
                         className="rounded bg-gray-100 px-2 py-1 text-gray-600 text-xs"
                       >
                         {tech}
@@ -436,7 +462,10 @@ export const MinimalTemplate = ({ data }: { data: ResumeType }) => {
             </h3>
             <div className="space-y-6">
               {data.experience.map((exp, index) => (
-                <div key={index} className="grid grid-cols-[1fr_3fr] gap-4">
+                <div
+                  key={exp.id || `exp-${index}`}
+                  className="grid grid-cols-[1fr_3fr] gap-4"
+                >
                   <div className="text-sm">
                     <div className="font-bold text-[#4a4a4a]">
                       {exp.startDate} –
@@ -459,7 +488,12 @@ export const MinimalTemplate = ({ data }: { data: ResumeType }) => {
                           ? [exp.description]
                           : []
                       ).map((line, i) => (
-                        <li key={i}>{line}</li>
+                        <li
+                          // biome-ignore lint/suspicious/noArrayIndexKey: description points are simple strings
+                          key={`line-${i}`}
+                        >
+                          {line}
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -476,7 +510,10 @@ export const MinimalTemplate = ({ data }: { data: ResumeType }) => {
             </h3>
             <div className="space-y-4">
               {data.education.map((edu, index) => (
-                <div key={index} className="grid grid-cols-[1fr_3fr] gap-4">
+                <div
+                  key={edu.id || `edu-${index}`}
+                  className="grid grid-cols-[1fr_3fr] gap-4"
+                >
                   <div className="font-bold text-[#4a4a4a] text-sm">
                     {edu.startDate} – {edu.endDate}
                   </div>
@@ -502,7 +539,7 @@ export const MinimalTemplate = ({ data }: { data: ResumeType }) => {
             </h3>
             <div className="space-y-6">
               {data.projects.map((project, index) => (
-                <div key={index}>
+                <div key={project.id || `project-${index}`}>
                   <h4 className="font-bold text-[#2c3e50] text-lg">
                     {project.name}
                   </h4>
@@ -526,7 +563,11 @@ export const MinimalTemplate = ({ data }: { data: ResumeType }) => {
             </h3>
             <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-[#444] text-sm">
               {data.skills.map((skill, index) => (
-                <div key={index} className="flex items-center">
+                <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: skills are simple strings
+                  key={`skill-${index}`}
+                  className="flex items-center"
+                >
                   <span className="mr-2 text-[#888]">•</span>
                   {skill}
                 </div>

@@ -83,7 +83,7 @@ export function SelectionActionMenu({
       }
 
       const rect = range.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
+      const _containerRect = container.getBoundingClientRect();
 
       // Position menu below the selection, centered horizontally
       const menuWidth = 600; // Approximate width of the menu
@@ -109,7 +109,7 @@ export function SelectionActionMenu({
 
   // Listen for mouseup to detect selection end
   useEffect(() => {
-    const handleMouseUp = (e: MouseEvent) => {
+    const handleMouseUp = (_e: MouseEvent) => {
       // Small delay to let the selection finalize
       setTimeout(handleSelectionChange, 10);
     };

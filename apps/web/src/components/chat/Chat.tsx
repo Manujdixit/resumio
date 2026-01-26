@@ -107,6 +107,7 @@ const Chat = ({
       pendingMessageSent.current = true;
 
       // Send the pending message
+      // biome-ignore lint/suspicious/noExplicitAny: sendMessage has a complex signature
       (sendMessage as any)(
         { text: pendingMessage },
         {
@@ -127,6 +128,7 @@ const Chat = ({
       if (pendingAction.type === "custom") {
         setInput(prompt);
       } else {
+        // biome-ignore lint/suspicious/noExplicitAny: sendMessage has a complex signature
         (sendMessage as any)(
           { text: prompt },
           {
@@ -182,6 +184,7 @@ const Chat = ({
     if (!(hasText || hasAttachments)) {
       return;
     }
+    // biome-ignore lint/suspicious/noExplicitAny: sendMessage has a complex signature
     (sendMessage as any)(
       {
         text: message.text || "Sent with attachments",

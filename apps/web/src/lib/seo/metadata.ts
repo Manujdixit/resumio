@@ -3,7 +3,7 @@
  */
 export function generateTitle(primary: string, suffix?: string): string {
   const base = suffix ? `${primary} | ${suffix}` : primary;
-  return base.length > 60 ? base.slice(0, 57) + "..." : base;
+  return base.length > 60 ? `${base.slice(0, 57)}...` : base;
 }
 
 /**
@@ -11,7 +11,7 @@ export function generateTitle(primary: string, suffix?: string): string {
  */
 export function generateDescription(text: string, maxLength = 160): string {
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength - 3).replace(/\s+\S*$/, "") + "...";
+  return `${text.slice(0, maxLength - 3).replace(/\s+\S*$/, "")}...`;
 }
 
 /**

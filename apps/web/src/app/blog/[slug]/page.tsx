@@ -17,7 +17,7 @@ interface BlogPostPageProps {
   }>;
 }
 
-export const revalidate = 3600;
+export const revalidate = 60 * 60 * 24;
 
 export async function generateMetadata({
   params,
@@ -48,6 +48,7 @@ export async function generateMetadata({
       authors: ["resumebuild.cv"],
       tags: [], // Add tags if available
     },
+    alternates: { canonical: `/blog/${post.slug}` },
   };
 }
 

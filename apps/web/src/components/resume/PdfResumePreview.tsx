@@ -4,9 +4,7 @@ import { Download, Loader2, Minus, Plus, ZoomIn, ZoomOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
-import { Document as PDFDocument } from "@react-pdf/renderer";
 import type { ResumeType } from "@/app/schemas/ResumeSchema";
-import { Button } from "@/components/ui/button";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -132,7 +130,7 @@ export default function PdfResumePreview() {
                 }
                 className="flex flex-col gap-4"
               >
-                {Array.from(new Array(numPages), (el, index) => (
+                {Array.from(new Array(numPages), (_el, index) => (
                   <Page
                     key={`page_${index + 1}`}
                     pageNumber={index + 1}

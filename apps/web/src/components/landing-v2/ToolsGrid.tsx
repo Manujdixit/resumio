@@ -105,8 +105,8 @@ export const ToolsGrid: React.FC = () => {
         </div>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {tools.map((tool, index) => (
-            <div key={index} className="flex gap-4">
+          {tools.map((tool, _index) => (
+            <div key={tool.title} className="flex gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100">
                 <tool.icon size={20} className="text-gray-600" />
               </div>

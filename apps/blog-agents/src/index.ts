@@ -59,7 +59,7 @@ program
         verbose: options.verbose,
       });
 
-      console.log("\n" + "━".repeat(50));
+      console.log(`\n${"━".repeat(50)}`);
       if (result.success) {
         console.log("✅ Blog generation completed successfully!");
         if (result.postUrl) {
@@ -153,7 +153,7 @@ program
         console.log(`   Slug: /blog/${post.slug}`);
       }
 
-      console.log("\n" + "━".repeat(60));
+      console.log(`\n${"━".repeat(60)}`);
       console.log(`Total: ${posts.length} posts`);
     } catch (error) {
       console.error("❌ Error fetching posts:", error);
@@ -242,7 +242,7 @@ program
         console.log(`   Created: ${post.createdAt.toLocaleDateString()}`);
       }
 
-      console.log("\n" + "━".repeat(60));
+      console.log(`\n${"━".repeat(60)}`);
       console.log(`Total: ${posts.length} drafts`);
     } catch (error) {
       console.error("❌ Error fetching drafts:", error);

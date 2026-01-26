@@ -107,6 +107,7 @@ export const HeroNew: React.FC = () => {
                 {[1, 2, 3, 4].map((i) => (
                   <button
                     key={i}
+                    type="button"
                     className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100 transition-colors hover:bg-gray-200"
                   >
                     <FileText size={20} className="text-gray-500" />

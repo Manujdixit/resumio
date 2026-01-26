@@ -188,7 +188,11 @@ export const SidebarTemplatePdf = ({ data }: { data: ResumeType }) => {
             <View>
               <Text style={styles.sidebarSectionTitle}>Skills</Text>
               {data.skills.map((skill, index) => (
-                <Text key={index} style={styles.skillItem}>
+                <Text
+                  // biome-ignore lint/suspicious/noArrayIndexKey: skills are simple strings
+                  key={`skill-${index}`}
+                  style={styles.skillItem}
+                >
                   • {skill}
                 </Text>
               ))}
@@ -211,7 +215,10 @@ export const SidebarTemplatePdf = ({ data }: { data: ResumeType }) => {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Professional Experience</Text>
               {data.experience.map((exp, index) => (
-                <View key={index} style={{ marginBottom: 5 }}>
+                <View
+                  key={exp.id || `exp-${index}`}
+                  style={{ marginBottom: 5 }}
+                >
                   <View style={styles.itemHeader}>
                     <View>
                       <Text style={styles.itemTitle}>{exp.company}</Text>
@@ -228,7 +235,11 @@ export const SidebarTemplatePdf = ({ data }: { data: ResumeType }) => {
                         ? [exp.description]
                         : []
                     ).map((line, i) => (
-                      <View key={i} style={styles.bulletPoint}>
+                      <View
+                        // biome-ignore lint/suspicious/noArrayIndexKey: description points are simple strings
+                        key={`line-${i}`}
+                        style={styles.bulletPoint}
+                      >
                         <Text style={styles.bulletDot}>•</Text>
                         <Text style={styles.bulletContent}>{line}</Text>
                       </View>
@@ -244,7 +255,10 @@ export const SidebarTemplatePdf = ({ data }: { data: ResumeType }) => {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Education</Text>
               {data.education.map((edu, index) => (
-                <View key={index} style={{ marginBottom: 8 }}>
+                <View
+                  key={edu.id || `edu-${index}`}
+                  style={{ marginBottom: 8 }}
+                >
                   <View style={styles.itemHeader}>
                     <View>
                       <Text style={styles.itemTitle}>{edu.institution}</Text>
@@ -269,7 +283,10 @@ export const SidebarTemplatePdf = ({ data }: { data: ResumeType }) => {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Projects</Text>
               {data.projects.map((project, index) => (
-                <View key={index} style={{ marginBottom: 8 }}>
+                <View
+                  key={project.id || `project-${index}`}
+                  style={{ marginBottom: 8 }}
+                >
                   <Text style={styles.itemTitle}>{project.name}</Text>
                   <Text style={styles.paragraph}>{project.description}</Text>
                   {project.tech && project.tech.length > 0 && (
@@ -281,7 +298,11 @@ export const SidebarTemplatePdf = ({ data }: { data: ResumeType }) => {
                       }}
                     >
                       {project.tech.map((tech, i) => (
-                        <Text key={i} style={styles.techTag}>
+                        <Text
+                          // biome-ignore lint/suspicious/noArrayIndexKey: tech items are simple strings
+                          key={`tech-${i}`}
+                          style={styles.techTag}
+                        >
                           {tech}
                         </Text>
                       ))}

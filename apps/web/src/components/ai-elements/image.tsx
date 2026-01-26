@@ -12,13 +12,16 @@ export const Image = ({
   mediaType,
   ...props
 }: ImageProps) => (
-  <img
-    {...props}
-    alt={props.alt}
-    className={cn(
-      "h-auto max-w-full overflow-hidden rounded-md",
-      props.className,
-    )}
-    src={`data:${mediaType};base64,${base64}`}
-  />
+  <>
+    {/* biome-ignore lint/performance/noImgElement: Base64 data URI */}
+    <img
+      {...props}
+      alt={props.alt}
+      className={cn(
+        "h-auto max-w-full overflow-hidden rounded-md",
+        props.className,
+      )}
+      src={`data:${mediaType};base64,${base64}`}
+    />
+  </>
 );

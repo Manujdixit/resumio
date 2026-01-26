@@ -24,7 +24,9 @@
       "!**/.alchemy",
       "!**/.svelte-kit",
       "!**/wrangler.jsonc",
-      "!**/.source"
+      "!**/.source",
+      "!**/.mastra",
+      "!**/apps/web/src/components/ui"
     ]
   },
   "formatter": {

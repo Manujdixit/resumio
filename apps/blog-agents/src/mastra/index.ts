@@ -4,10 +4,11 @@
  * Sets up the Mastra framework for the blog agents.
  */
 
+import path from "node:path";
 import { Mastra } from "@mastra/core";
+import { PinoLogger } from "@mastra/loggers";
 import { PostgresStore } from "@mastra/pg";
 import dotenv from "dotenv";
-import path from "path";
 import {
   editorAgent,
   orchestratorAgent,
@@ -48,8 +49,9 @@ for (const envVar of requiredEnvVars) {
 export const mastra = new Mastra({
   storage: new PostgresStore({
     id: "blog-agents-storage",
-    connectionString: process.env.DATABASE_URL!,
+    connectionString: process.env.DATABASE_URL || "",
   }),
+  logger: new PinoLogger(),
   agents: {
     orchestratorAgent,
     topicFinderAgent,

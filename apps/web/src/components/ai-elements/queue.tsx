@@ -151,13 +151,16 @@ export const QueueItemImage = ({
   className,
   ...props
 }: QueueItemImageProps) => (
-  <img
-    alt=""
-    className={cn("h-8 w-8 rounded border object-cover", className)}
-    height={32}
-    width={32}
-    {...props}
-  />
+  <>
+    {/* biome-ignore lint/performance/noImgElement: Queue item thumbnail */}
+    <img
+      alt=""
+      className={cn("h-8 w-8 rounded border object-cover", className)}
+      height={32}
+      width={32}
+      {...props}
+    />
+  </>
 );
 
 export type QueueItemFileProps = ComponentProps<"span">;
