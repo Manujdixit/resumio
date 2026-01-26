@@ -4,7 +4,6 @@ import { Download, Loader2, Minus, Plus, ZoomIn, ZoomOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
-import type { ResumeType } from "@/app/schemas/ResumeSchema";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -12,6 +11,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import type { ResumeType } from "@/lib/schemas/ResumeSchema";
 import { useResumeStore } from "@/store/useResumeStore";
 import { SelectionActionMenu } from "./SelectionActionMenu";
 import { getPdfTemplate } from "./templateUtils";

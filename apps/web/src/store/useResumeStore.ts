@@ -1,6 +1,6 @@
 import type { schema } from "@resumio/db";
 import { create } from "zustand";
-import type { ResumeType } from "@/app/schemas/ResumeSchema";
+import type { ResumeType } from "@/lib/schemas/ResumeSchema";
 
 export type { ResumeType };
 

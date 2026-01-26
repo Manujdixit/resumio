@@ -1,4 +1,4 @@
-import type { ResumeType } from "@/app/schemas/ResumeSchema";
+import type { ResumeType } from "@/lib/schemas/ResumeSchema";
 import { MinimalTemplatePdf } from "./pdf/MinimalTemplatePdf";
 import { ModernTemplatePdf } from "./pdf/ModernTemplatePdf";
 import { SidebarTemplatePdf } from "./pdf/SidebarTemplatePdf";

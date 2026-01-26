@@ -12,8 +12,8 @@ import {
 import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { z } from "zod";
-import { chatModel } from "@/app/constants/modals";
-import { ResumeSchema, type ResumeType } from "@/app/schemas/ResumeSchema";
+import { chatModel } from "@/lib/constants/modals";
+import { ResumeSchema, type ResumeType } from "@/lib/schemas/ResumeSchema";
 
 const tools = {
   updateResume: tool({
@@ -43,8 +43,8 @@ const tools = {
   }),
 };
 
-export type ChatTools = InferUITools<typeof tools>;
-export type ChatMessages = UIMessage<never, UIDataTypes, ChatTools>;
+type ChatTools = InferUITools<typeof tools>;
+type ChatMessages = UIMessage<never, UIDataTypes, ChatTools>;
 
 // GET endpoint to retrieve saved chat messages
 export async function GET(req: Request) {

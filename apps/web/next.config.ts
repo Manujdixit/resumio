@@ -41,9 +41,6 @@ export default withSentryConfig(withAnalyzer(nextConfig), {
   // Sentry auth token
   authToken: process.env.SENTRY_AUTH_TOKEN,
 
-  // Sentry URL
-  url: process.env.SENTRY_URL,
-
   // Suppress Sentry source map upload logs during build
   silent: !process.env.CI,
 

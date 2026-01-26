@@ -1,4 +1,4 @@
-import type { ResumeType } from "@/app/schemas/ResumeSchema";
+import type { ResumeType } from "@/lib/schemas/ResumeSchema";
 
 export const ModernTemplate = ({ data }: { data: ResumeType }) => {
   return (
