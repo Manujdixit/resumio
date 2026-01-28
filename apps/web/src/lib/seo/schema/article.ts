@@ -1,4 +1,4 @@
-import { SITE_NAME, SITE_URL } from "../constants";
+import { organizationRef } from "./organization";
 
 interface ArticleParams {
   headline: string;
@@ -22,11 +22,7 @@ export function createArticleSchema(params: ArticleParams) {
     datePublished: params.datePublished,
     dateModified: params.dateModified,
     image: params.image,
-    author: { "@type": "Organization", name: SITE_NAME },
-    publisher: {
-      "@type": "Organization",
-      name: SITE_NAME,
-      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
-    },
+    author: organizationRef,
+    publisher: organizationRef,
   };
 }

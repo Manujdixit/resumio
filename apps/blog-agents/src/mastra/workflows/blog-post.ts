@@ -65,49 +65,6 @@ const topicDiscoverySchema = z.object({
   topic: z.string().describe("The suggested blog topic title"),
 });
 
-// Research brief schema for structured output
-const researchBriefSchema = z.object({
-  keyStatistics: z
-    .array(
-      z.object({
-        stat: z.string().describe("The statistic or data point"),
-        source: z.string().describe("Source attribution"),
-        year: z.string().optional().describe("Year of the data"),
-      }),
-    )
-    .describe("Key statistics with sources"),
-  expertInsights: z
-    .array(
-      z.object({
-        insight: z.string().describe("The expert quote or insight"),
-        attribution: z.string().describe("Who said it or source"),
-      }),
-    )
-    .describe("Expert quotes and insights"),
-  industryTrends: z
-    .array(z.string())
-    .describe("Current industry trends relevant to the topic"),
-  commonMistakes: z
-    .array(z.string())
-    .describe("Common mistakes or misconceptions to address"),
-  uniqueAngles: z
-    .array(z.string())
-    .describe("Unique angles not covered by competitors"),
-  suggestedCitations: z
-    .array(
-      z.object({
-        title: z.string().describe("Article or source title"),
-        url: z.string().describe("URL of the source"),
-      }),
-    )
-    .describe("3-5 authoritative sources for citations"),
-  contentRecommendations: z
-    .array(z.string())
-    .describe("Recommendations based on research"),
-});
-
-export type ResearchBrief = z.infer<typeof researchBriefSchema>;
-
 // --- STEPS ---
 
 // 1. Topic Discovery (Auto-detect if missing)
@@ -331,28 +288,24 @@ const researchStep = createStep({
       6. Note common mistakes to address
       7. Find unique angles
       
-      Return a comprehensive research brief.`,
+      Return a comprehensive research brief in PLAIN TEXT format.
+      Do NOT return JSON. Use markdown headings for each section.`,
       {
         maxSteps: 10,
-        structuredOutput: {
-          schema: researchBriefSchema,
-        },
       },
     );
 
-    // With structuredOutput, result.object contains the validated data
-    const researchBrief = result.object
-      ? JSON.stringify(result.object, null, 2)
-      : result.text;
+    // Get plain text response
+    const researchBrief = result.text?.trim() || "";
 
     // Validate we got something
-    if (!researchBrief || researchBrief === "null" || researchBrief === "{}") {
+    if (!researchBrief || researchBrief.length < 100) {
       console.error(
         "❌ [Workflow] Research failed. Full result:",
         JSON.stringify(result, null, 2),
       );
       throw new Error(
-        `Researcher returned empty brief for topic: "${topic}". Check model configuration.`,
+        `Researcher returned empty or insufficient brief for topic: "${topic}". Check model configuration.`,
       );
     }
 
@@ -381,7 +334,7 @@ const seoStep = createStep({
     const { topic, topicBrief, researchBrief, dryRun } = inputData;
     console.log("🎯 [Workflow] Planning SEO...");
     const result = await seoStrategistAgent.generate(
-      `Create an SEO strategy for this blog post:
+      `Create an SEO strategy for this blog post.
             
             Topic Brief:
             ${topicBrief}
@@ -389,15 +342,53 @@ const seoStep = createStep({
             Research:
             ${researchBrief}
             
-            Generate:
+            Generate an SEO brief in PLAIN TEXT with these sections:
+            
+            ## Meta Information
             - Meta title (50-60 chars)
             - Meta description (150-160 chars)
             - URL slug
+            
+            ## Keyword Strategy
+            - Primary Keyword
+            - Secondary Keywords (list)
+            
+            ## Content Structure
             - H2/H3 heading structure
-            - Internal linking recommendations
-            - 3-5 FAQs`,
+            
+            ## Internal Links
+            - Recommended internal links with anchor text
+            
+            ## FAQ Section
+            - 3-5 FAQs with brief answers
+            
+            ## Image Recommendations
+            - Banner Image (16:9): description, alt text, placement
+            - Internal Image 1: description, alt text, placement, purpose
+            - Internal Image 2: description, alt text, placement, purpose
+            - Internal Image 3 (optional): description, alt text, placement, purpose
+            
+            IMPORTANT: Output plain text with markdown headings. Do NOT output JSON.`,
+      {
+        maxSteps: 8,
+      },
     );
-    return { topic, topicBrief, researchBrief, seoBrief: result.text, dryRun };
+
+    const seoBrief = result.text?.trim() || "";
+
+    // Validate we got something
+    if (!seoBrief || seoBrief.length < 100) {
+      console.error(
+        "❌ [Workflow] SEO planning failed. Full result:",
+        JSON.stringify(result, null, 2),
+      );
+      throw new Error(
+        `SEO strategist returned empty or insufficient brief for topic: "${topic}". Check model configuration.`,
+      );
+    }
+
+    console.log("✅ [Workflow] SEO planning completed successfully");
+    return { topic, topicBrief, researchBrief, seoBrief, dryRun };
   },
 });
 

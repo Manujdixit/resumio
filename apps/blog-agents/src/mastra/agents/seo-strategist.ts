@@ -95,8 +95,44 @@ Provide an SEO brief containing:
 ## Additional SEO Notes
 - Schema markup recommendations
 - Featured snippet opportunities
-- Image optimization notes`,
+
+## Image Recommendations
+
+### Banner Image (16:9 aspect ratio)
+- Description: [Detailed visual description - what the image should show, style, mood, colors, key elements. Be specific enough to guide AI image generation or stock photo selection]
+- Alt Text: [SEO-optimized alt text including primary keyword, max 125 chars]
+- Suggested Placement: Featured/Hero image
+
+### Internal Image 1
+- Description: [What the image should depict - specific visual elements, style, composition]
+- Alt Text: [Descriptive alt text for accessibility and SEO]
+- Suggested Placement: [After which H2 heading]
+- Purpose: [illustration / diagram / comparison / screenshot / infographic]
+
+### Internal Image 2
+- Description: [What the image should depict]
+- Alt Text: [Descriptive alt text]
+- Suggested Placement: [After which H2 heading]
+- Purpose: [illustration / diagram / comparison / screenshot / infographic]
+
+### Internal Image 3 (if needed)
+- Description: [What the image should depict]
+- Alt Text: [Descriptive alt text]
+- Suggested Placement: [After which H2 heading]
+- Purpose: [illustration / diagram / comparison / screenshot / infographic]
+
+IMAGE GUIDELINES:
+- Banner should be visually compelling and represent the main topic
+- Internal images should support specific sections and aid comprehension
+- Prefer: process diagrams, comparisons, data visualizations, conceptual illustrations
+- Alt text must be descriptive, include keywords naturally, and aid accessibility
+- Descriptions should be detailed enough for AI image generation or stock photo search`,
   model: getModel("seoStrategist"),
+  defaultOptions: {
+    modelSettings: {
+      temperature: 1,
+    },
+  },
   tools: {
     getInternalLinks: getInternalLinksTool,
     queryBlogs: queryBlogsTool,

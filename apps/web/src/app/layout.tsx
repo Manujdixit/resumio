@@ -3,7 +3,11 @@ import { Manrope } from "next/font/google";
 import "../index.css";
 import Providers from "@/components/providers";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { organizationSchema, siteConfig } from "@/lib/seo-config";
+import {
+  organizationSchema,
+  siteConfig,
+  websiteSchema,
+} from "@/lib/seo-config";
 
 const manrope = Manrope({
   variable: "--font-sans",
@@ -81,7 +85,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <JsonLd data={organizationSchema} />
+        <JsonLd data={[organizationSchema, websiteSchema]} />
       </head>
       <body className={`${manrope.variable} font-sans antialiased`}>
         <Providers>{children}</Providers>

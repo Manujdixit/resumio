@@ -3,7 +3,8 @@ import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { generateArticleSchema, siteConfig } from "@/lib/seo-config";
+import { createArticleSchema } from "@/lib/seo/schema/article";
+import { siteConfig } from "@/lib/seo-config";
 import { PublicResumeViewer } from "./PublicResumeViewer";
 
 // Force dynamic rendering since we're fetching data
@@ -74,13 +75,13 @@ export default async function SharePage({ params }: Props) {
   }
 
   const pageUrl = `${siteConfig.url}/share/${id}`;
-  const articleSchema = generateArticleSchema(
-    resume.title,
-    "Professional resume created with resumebuild.cv",
-    pageUrl,
-    new Date(resume.createdAt).toISOString(),
-    new Date(resume.updatedAt).toISOString(),
-  );
+  const articleSchema = createArticleSchema({
+    headline: resume.title,
+    description: "Professional resume created with resumebuild.cv",
+    url: pageUrl,
+    datePublished: new Date(resume.createdAt).toISOString(),
+    dateModified: new Date(resume.updatedAt).toISOString(),
+  });
 
   // We need to pass the data to the client component.
   // ResumePreview expects data from the store, but for a public page,

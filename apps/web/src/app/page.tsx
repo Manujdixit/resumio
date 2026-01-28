@@ -12,12 +12,12 @@ import {
   UseCases,
 } from "@/components/landing-v2";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { softwareApplicationSchema, websiteSchema } from "@/lib/seo-config";
+import { landingPageSchema } from "@/lib/seo-config";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
-      <JsonLd data={[websiteSchema, softwareApplicationSchema]} />
+      <JsonLd data={landingPageSchema} />
       <NavbarNew />
       <main>
         <HeroNew />

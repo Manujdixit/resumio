@@ -38,7 +38,7 @@ export function getModel(role: AgentRole): string {
   const defaults: Record<AgentRole, string> = {
     orchestrator: "vercel/xiaomi/mimo-v2-flash",
     topicFinder: "vercel/xiaomi/mimo-v2-flash",
-    researcher: "vercel/deepseek/deepseek-v3.2",
+    researcher: "vercel/xiaomi/mimo-v2-flash",
     seoStrategist: "vercel/xiaomi/mimo-v2-flash",
     writer: "vercel/xiaomi/mimo-v2-flash",
     editor: "vercel/xiaomi/mimo-v2-flash",
