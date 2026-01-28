@@ -3,13 +3,19 @@
  * Centralized metadata and Schema.org definitions for AI Search Visibility
  */
 
+import { ORG_ID, SITE_NAME, SITE_URL, WEBSITE_ID } from "./seo/constants";
+import { organizationRef, organizationSchema } from "./seo/schema/organization";
+
+// Re-export organization schema for use in layout
+export { organizationSchema };
+
 export const siteConfig = {
-  name: "resumebuild.cv",
+  name: SITE_NAME,
   title: "resumebuild.cv - AI-Powered Resume Builder",
   description:
     "Create professional, ATS-optimized resumes in minutes with our AI-powered resume builder. Chat with AI to generate your perfect resume.",
-  url: "https://www.resumebuild.cv",
-  ogImage: "https://www.resumebuild.cv/og-image.png",
+  url: SITE_URL,
+  ogImage: `${SITE_URL}/og-image.png`,
   links: {
     twitter: "https://twitter.com/resumebuildcv",
   },
@@ -28,71 +34,31 @@ export const siteConfig = {
 };
 
 /**
- * Organization Schema for brand identity
- * Used by AI search engines to understand business context
- */
-export const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "resumebuild.cv",
-  url: siteConfig.url,
-  logo: `${siteConfig.url}/logo.png`,
-  description: siteConfig.description,
-  sameAs: [siteConfig.links.twitter],
-  contactPoint: {
-    "@type": "ContactPoint",
-    email: "resumebuildcv@gmail.com",
-    contactType: "Customer Support",
-    availableLanguage: ["English"],
-  },
-};
-
-/**
  * WebSite Schema for site-wide search action
  * Enables AI systems to understand site structure
  */
 export const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: siteConfig.name,
-  url: siteConfig.url,
+  "@id": WEBSITE_ID,
+  name: SITE_NAME,
+  url: SITE_URL,
   description: siteConfig.description,
-  publisher: {
-    "@type": "Organization",
-    name: siteConfig.name,
-  },
+  publisher: { "@id": ORG_ID },
 };
 
 /**
- * SoftwareApplication Schema for the resume builder product
- * Helps AI categorize the service correctly
+ * Landing Page WebPage schema
+ * Specific schema for the homepage
  */
-export const softwareApplicationSchema = {
+export const landingPageSchema = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "resumebuild.cv Resume Builder",
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web",
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free plan available with premium options",
-  },
+  "@type": "WebPage",
+  name: "AI-Powered Resume Builder | resumebuild.cv",
   description: siteConfig.description,
-  url: siteConfig.url,
-  screenshot: `${siteConfig.url}/screenshot.png`,
-  // Note: aggregateRating removed until real review data is available
-  // Adding fake ratings violates Schema.org guidelines and may result in penalties
-  featureList: [
-    "AI-powered resume generation",
-    "ATS optimization",
-    "Multiple professional templates",
-    "Real-time preview",
-    "PDF export",
-    "LinkedIn import",
-    "Cover letter generation",
-  ],
+  url: SITE_URL,
+  publisher: organizationRef,
+  inLanguage: "en-US",
 };
 
 /**
@@ -109,48 +75,7 @@ export function generateWebPageSchema(
     name: pageTitle,
     description: pageDescription,
     url: pageUrl,
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
+    publisher: organizationRef,
     inLanguage: "en-US",
-  };
-}
-
-/**
- * Generate Article schema for shared resumes
- */
-export function generateArticleSchema(
-  title: string,
-  description: string,
-  url: string,
-  datePublished: string,
-  dateModified: string,
-) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: title,
-    description: description,
-    url: url,
-    datePublished: datePublished,
-    dateModified: dateModified,
-    author: {
-      "@type": "Organization",
-      name: siteConfig.name,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      logo: {
-        "@type": "ImageObject",
-        url: `${siteConfig.url}/logo.png`,
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": url,
-    },
   };
 }

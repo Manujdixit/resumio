@@ -159,9 +159,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <>
       <JsonLd data={schemas as any} />
-      <div className="container mx-auto py-12">
-        <div className="mb-12 space-y-4 text-center">
-          <div className="flex items-center justify-center gap-2">
+
+      {/* Hero Header with Background Image */}
+      <div
+        className="relative w-full bg-center bg-cover bg-gray-900 bg-no-repeat"
+        style={{
+          backgroundImage: post.featuredImage
+            ? `url(${post.featuredImage})`
+            : undefined,
+          minHeight: "400px",
+        }}
+      >
+        {/* Dark backdrop overlay */}
+        <div className="absolute inset-0 bg-black/70" />
+
+        <div className="container relative mx-auto flex min-h-[400px] flex-col items-center justify-center px-4 py-16 text-center">
+          <div className="mb-4 flex items-center justify-center gap-2">
             {post.category && (
               <Link href={`/blog/category/${post.category.slug}`}>
                 <Badge variant="secondary" className="hover:bg-secondary/80">
@@ -169,19 +182,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </Badge>
               </Link>
             )}
-            <span className="text-muted-foreground text-sm">
+            <span className="text-sm text-white/80">
               {post.readingTime} min read
             </span>
           </div>
-          <h1 className="font-extrabold text-4xl tracking-tight lg:text-5xl">
+          <h1 className="max-w-4xl font-extrabold text-4xl text-white tracking-tight lg:text-5xl">
             {post.title}
           </h1>
-          {post.excerpt && (
-            <p className="mx-auto max-w-2xl text-muted-foreground text-xl">
-              {post.excerpt}
-            </p>
-          )}
-          <div className="flex items-center justify-center text-muted-foreground text-sm">
+          <div className="mt-4 flex items-center justify-center text-sm text-white/80">
             <time dateTime={post.publishedAt?.toISOString()}>
               {post.publishedAt?.toLocaleDateString("en-US", {
                 year: "numeric",
@@ -191,9 +199,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </time>
           </div>
         </div>
+      </div>
 
-        <Separator className="my-8" />
-
+      <div className="container mx-auto py-12">
         <div className="relative grid grid-cols-1 gap-10 xl:grid-cols-[1fr_300px]">
           <article className="prose prose-lg dark:prose-invert max-w-none">
             <MDXRemote

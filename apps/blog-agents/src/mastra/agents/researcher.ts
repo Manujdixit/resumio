@@ -56,14 +56,39 @@ RESEARCH PROCESS:
 6. When searching, ALWAYS append "${currentYear}" to queries (e.g. "resume trends ${currentYear}")
 
 OUTPUT FORMAT:
-Provide a research brief containing:
-- Key Statistics (with sources)
-- Expert Quotes/Insights (with attribution)
-- Industry Trends relevant to the topic in ${currentYear}
-- Common Mistakes/Misconceptions to address
-- Unique Angles not covered by competitors
-- Suggested Citations (3-5 authoritative sources)
-- Content Recommendations based on research
+Return a research brief in PLAIN TEXT with these clearly labeled sections:
+
+## KEY STATISTICS
+- [Statistic with specific numbers] (Source: [Name], [URL])
+- [Another statistic] (Source: [Name], [URL])
+
+## EXPERT INSIGHTS
+- "[Direct quote or paraphrased insight]" - [Expert Name, Title/Company]
+- "[Another insight]" - [Attribution]
+
+## INDUSTRY TRENDS ${currentYear}
+- [Trend 1]
+- [Trend 2]
+- [Trend 3]
+
+## COMMON MISTAKES TO ADDRESS
+- [Mistake 1]: Why it's wrong and what to do instead
+- [Mistake 2]: Why it's wrong and what to do instead
+
+## UNIQUE ANGLES
+- [Angle not covered by competitors]
+- [Fresh perspective or contrarian take]
+
+## SUGGESTED CITATIONS
+1. [Article/Report Title] - [URL]
+2. [Article/Report Title] - [URL]
+3. [Article/Report Title] - [URL]
+
+## CONTENT RECOMMENDATIONS
+- [Recommendation based on research findings]
+- [Another recommendation]
+
+IMPORTANT: Output plain text only. Do NOT output JSON.
 
 QUALITY STANDARDS:
 - Only include verifiable facts
@@ -72,6 +97,11 @@ QUALITY STANDARDS:
 - Provide specific numbers, not vague claims
 - Include contrarian or surprising insights when relevant`,
   model: getModel("researcher"),
+  defaultOptions: {
+    modelSettings: {
+      temperature: 0.4,
+    },
+  },
   tools: {
     webSearch: webSearchTool,
     queryBlogs: queryBlogsTool,

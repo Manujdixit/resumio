@@ -1,4 +1,5 @@
 import type { HowTo, WithContext } from "schema-dts";
+import { organizationRef } from "./organization";
 
 export function createHowToSchema(data: {
   name: string;
@@ -16,6 +17,7 @@ export function createHowToSchema(data: {
     image: data.image,
     url: data.url,
     totalTime: data.totalTime,
+    publisher: organizationRef as HowTo["publisher"],
     step: data.steps.map((step, index) => ({
       "@type": "HowToStep",
       position: index + 1,

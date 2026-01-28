@@ -1,4 +1,4 @@
-import { SITE_NAME, SITE_URL } from "../constants";
+import { organizationRef } from "./organization";
 
 interface CollectionPageParams {
   name: string;
@@ -16,10 +16,6 @@ export function createCollectionSchema(params: CollectionPageParams) {
     name: params.name,
     description: params.description,
     url: params.url,
-    publisher: {
-      "@type": "Organization",
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
+    publisher: organizationRef,
   };
 }

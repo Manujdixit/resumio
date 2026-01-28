@@ -13,6 +13,7 @@ import {
   Users,
   Zap,
 } from "lucide-react";
+import Link from "next/link";
 import type React from "react";
 
 const tools = [
@@ -33,6 +34,7 @@ const tools = [
     title: "ATS Scanner",
     description:
       "Check your resume against 50+ ATS systems to ensure it passes automated screening.",
+    href: "/tools/ats-checker",
   },
   {
     icon: Layout,
@@ -105,21 +107,42 @@ export const ToolsGrid: React.FC = () => {
         </div>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {tools.map((tool, _index) => (
-            <div key={tool.title} className="flex gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100">
-                <tool.icon size={20} className="text-gray-600" />
+          {tools.map((tool, _index) => {
+            const Content = () => (
+              <div className="flex gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                  <tool.icon size={20} className="text-gray-600" />
+                </div>
+                <div>
+                  <h3 className="mb-1 font-semibold text-gray-900">
+                    {tool.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {tool.description}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="mb-1 font-semibold text-gray-900">
-                  {tool.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {tool.description}
-                </p>
+            );
+
+            if (tool.href) {
+              return (
+                // biome-ignore lint/suspicious/noExplicitAny: href matches a valid route
+                <Link
+                  key={tool.title}
+                  href={tool.href as any}
+                  className="group -m-2 block rounded-lg p-2 transition-colors hover:bg-gray-50"
+                >
+                  <Content />
+                </Link>
+              );
+            }
+
+            return (
+              <div key={tool.title}>
+                <Content />
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
