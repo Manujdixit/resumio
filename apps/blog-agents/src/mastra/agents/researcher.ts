@@ -72,12 +72,6 @@ QUALITY STANDARDS:
 - Provide specific numbers, not vague claims
 - Include contrarian or surprising insights when relevant`,
   model: getModel("researcher"),
-  defaultOptions: {
-    modelSettings: {
-      temperature: 0.15,
-      topP: 0.75,
-    },
-  },
   tools: {
     webSearch: webSearchTool,
     queryBlogs: queryBlogsTool,

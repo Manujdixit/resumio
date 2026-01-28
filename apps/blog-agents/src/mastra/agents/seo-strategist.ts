@@ -97,11 +97,6 @@ Provide an SEO brief containing:
 - Featured snippet opportunities
 - Image optimization notes`,
   model: getModel("seoStrategist"),
-  defaultOptions: {
-    modelSettings: {
-      temperature: 0.4,
-    },
-  },
   tools: {
     getInternalLinks: getInternalLinksTool,
     queryBlogs: queryBlogsTool,

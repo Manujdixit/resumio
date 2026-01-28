@@ -21,6 +21,15 @@ export const blogStatusEnum = pgEnum("blog_status", [
 ]);
 
 /**
+ * Content Role Enum - Defines the architectural role of the post
+ */
+export const contentRoleEnum = pgEnum("content_role", [
+  "pillar", // Broad, comprehensive guide (Parent)
+  "support", // Specific deep-dive (Child)
+  "standalone", // News or one-off updates
+]);
+
+/**
  * Blog Categories - agent-generated and managed
  */
 export const blogCategory = pgTable(
@@ -64,6 +73,11 @@ export const blogPost = pgTable(
     canonicalUrl: text("canonical_url"),
     faq: jsonb("faq").$type<{ question: string; answer: string }[]>(),
     embedding: vector("embedding", { dimensions: 1024 }),
+
+    // Cluster / Intent Governance
+    contentRole: contentRoleEnum("content_role").default("standalone"),
+    parentPostId: text("parent_post_id"), // Self-reference added in relations
+    intent: text("intent"), // Core search intent (e.g., "resume-guide")
 
     // Quality & Status
     status: blogStatusEnum("status").notNull().default("draft"),
@@ -162,6 +176,15 @@ export const blogPostRelations = relations(blogPost, ({ one, many }) => ({
   category: one(blogCategory, {
     fields: [blogPost.categoryId],
     references: [blogCategory.id],
+  }),
+  // Self-reference for Topic Clusters
+  parentPost: one(blogPost, {
+    fields: [blogPost.parentPostId],
+    references: [blogPost.id],
+    relationName: "cluster_hierarchy",
+  }),
+  childPosts: many(blogPost, {
+    relationName: "cluster_hierarchy",
   }),
   tags: many(blogPostTag),
   internalLinks: many(blogInternalLink),
