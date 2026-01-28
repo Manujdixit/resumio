@@ -8,6 +8,106 @@ import { seoStrategistAgent } from "../agents/seo-strategist.js";
 import { topicFinderAgent } from "../agents/topic-finder.js";
 import { queryBlogsTool } from "../tools/query-blogs.js";
 
+// --- SCHEMAS ---
+
+// Topic Brief schema for structured output - using flexible strings instead of enums
+// to avoid validation failures with models that may use slightly different terminology
+// IMPORTANT: Field names use camelCase - descriptions explicitly state the expected key name
+const topicBriefSchema = z.object({
+  title: z.string().describe("Compelling, keyword-optimized title"),
+  userIntent: z.object({
+    primaryQuestion: z.string().describe("The main question this post answers"),
+    buyingStage: z.string().describe("awareness, consideration, or decision"),
+    userGoal: z.string().describe("What the user wants to achieve"),
+  }),
+  clusterStrategy: z.object({
+    role: z.string().describe("pillar or support"),
+    isNewCluster: z
+      .boolean()
+      .describe("Whether this starts a new topic cluster"),
+    parentPillarId: z
+      .string()
+      .nullable()
+      .describe("DB ID of parent pillar if this is a support post"),
+    parentPillarSlug: z
+      .string()
+      .nullable()
+      .describe("Slug of parent pillar for internal linking"),
+  }),
+  primaryKeyword: z
+    .string()
+    .describe("(primaryKeyword) Main SEO keyword to target"),
+  secondaryKeywords: z
+    .array(z.string())
+    .describe("(secondaryKeywords) 3-5 related keywords"),
+  targetAudience: z.string().describe("(targetAudience) Who this post is for"),
+  searchIntent: z
+    .string()
+    .describe("(searchIntent) informational, how-to, list, or comparison"),
+  recommendedCategory: z
+    .string()
+    .describe("(recommendedCategory) Blog category slug"),
+  contentAngle: z
+    .string()
+    .describe("(contentAngle) Unique value proposition / angle"),
+  suggestedWordCount: z
+    .number()
+    .describe("(suggestedWordCount) Recommended word count 1500-2500"),
+  keyPoints: z
+    .array(z.string())
+    .describe("(keyPoints) 5-7 key points to cover"),
+});
+
+export type TopicBrief = z.infer<typeof topicBriefSchema>;
+
+// Simple schema for topic discovery
+const topicDiscoverySchema = z.object({
+  topic: z.string().describe("The suggested blog topic title"),
+});
+
+// Research brief schema for structured output
+const researchBriefSchema = z.object({
+  keyStatistics: z
+    .array(
+      z.object({
+        stat: z.string().describe("The statistic or data point"),
+        source: z.string().describe("Source attribution"),
+        year: z.string().optional().describe("Year of the data"),
+      }),
+    )
+    .describe("Key statistics with sources"),
+  expertInsights: z
+    .array(
+      z.object({
+        insight: z.string().describe("The expert quote or insight"),
+        attribution: z.string().describe("Who said it or source"),
+      }),
+    )
+    .describe("Expert quotes and insights"),
+  industryTrends: z
+    .array(z.string())
+    .describe("Current industry trends relevant to the topic"),
+  commonMistakes: z
+    .array(z.string())
+    .describe("Common mistakes or misconceptions to address"),
+  uniqueAngles: z
+    .array(z.string())
+    .describe("Unique angles not covered by competitors"),
+  suggestedCitations: z
+    .array(
+      z.object({
+        title: z.string().describe("Article or source title"),
+        url: z.string().describe("URL of the source"),
+      }),
+    )
+    .describe("3-5 authoritative sources for citations"),
+  contentRecommendations: z
+    .array(z.string())
+    .describe("Recommendations based on research"),
+});
+
+export type ResearchBrief = z.infer<typeof researchBriefSchema>;
+
 // --- STEPS ---
 
 // 1. Topic Discovery (Auto-detect if missing)
@@ -28,16 +128,44 @@ const topicDiscoveryStep = createStep({
     }
 
     console.log("🕵️ [Workflow] Auto-discovering topic...");
-    const result = await topicFinderAgent.generate(
-      `Suggest ONE high-potential blog topic for ResumeBuild that we haven't covered yet.
-            Analyze existing content gaps using queryBlogs tool.
-            Consider seasonal relevance and search trends.
-            
-            IMPORTANT: Return ONLY the topic title. Do not include explanation or quotes.`,
+
+    const MAX_DISCOVERY_RETRIES = 3;
+    let effectiveTopic = "";
+
+    for (let attempt = 1; attempt <= MAX_DISCOVERY_RETRIES; attempt++) {
+      const result = await topicFinderAgent.generate(
+        `Suggest ONE high-potential blog topic for ResumeBuild that we haven't covered yet.
+              Analyze existing content gaps using queryBlogs tool.
+              Consider seasonal relevance and search trends.
+              
+              Return a JSON object with a single "topic" field containing the topic title.`,
+        {
+          maxSteps: 5,
+          structuredOutput: {
+            schema: topicDiscoverySchema,
+          },
+        },
+      );
+
+      // With structuredOutput, result.object contains the validated data
+      effectiveTopic =
+        result.object?.topic?.trim() || result.text?.trim() || "";
+      effectiveTopic = effectiveTopic.replace(/^"|"$/g, "");
+
+      if (effectiveTopic && effectiveTopic.length > 10) {
+        console.log(`💡 [Workflow] Selected topic: "${effectiveTopic}"`);
+        return { topic: effectiveTopic, dryRun };
+      }
+
+      console.warn(
+        `⚠️ [Workflow] Topic discovery attempt ${attempt}/${MAX_DISCOVERY_RETRIES} returned empty or invalid topic. Retrying...`,
+      );
+    }
+
+    // If all retries failed, throw an error
+    throw new Error(
+      `Topic discovery failed after ${MAX_DISCOVERY_RETRIES} attempts. The model returned empty or invalid topics.`,
     );
-    const effectiveTopic = result.text.trim().replace(/^"|"$/g, "");
-    console.log(`💡 [Workflow] Selected topic: "${effectiveTopic}"`);
-    return { topic: effectiveTopic, dryRun };
   },
 });
 
@@ -59,16 +187,12 @@ const topicValidationStep = createStep({
 
     console.log(`🛡️ [Workflow] Checking similarity for: "${topic}"`);
 
-    // Tools should be called via their run or execute method
-    // In Mastra, they are often registered on the agent or called directly
-    // Using direct execution with the correct context structure
+    // Execute queryBlogsTool directly - parameters go at top level, not nested in context
     // biome-ignore lint/suspicious/noExplicitAny: Mastra tool execution types can be tricky
     const simResult = await (queryBlogsTool as any).execute({
-      context: {
-        query: topic,
-        similarityThreshold: 0.15,
-        limit: 1,
-      },
+      query: topic,
+      similarityThreshold: 0.15,
+      limit: 1,
     });
 
     // biome-ignore lint/suspicious/noExplicitAny: result structure varies
@@ -89,31 +213,77 @@ const topicValidationStep = createStep({
         
         Please suggest a NEW, 100% unique angle or a more specific sub-topic that provides different value to the reader.
         
-        IMPORTANT: Return ONLY the new topic title. Do not include explanation or quotes.`,
+        Return a JSON object with a single "topic" field containing the new topic title.`,
+        {
+          maxSteps: 3,
+          structuredOutput: {
+            schema: topicDiscoverySchema,
+          },
+        },
       );
 
-      topic = pivotResult.text.trim().replace(/^"|"$/g, "");
+      topic =
+        pivotResult.object?.topic?.trim() || pivotResult.text?.trim() || "";
+      topic = topic.replace(/^"|"$/g, "");
+
+      if (!topic || topic.length < 10) {
+        throw new Error(
+          "Topic pivot failed - model returned empty or invalid topic",
+        );
+      }
+
       console.log(`✨ [Workflow] New pivoted topic: "${topic}"`);
     }
 
-    // 3. Generate Brief
+    // 3. Generate Brief using structuredOutput for guaranteed response
     console.log(
       `📋 [Workflow] Validating topic & generating brief: "${topic}"`,
     );
     const result = await topicFinderAgent.generate(
       `Validate and create a topic brief for: "${topic}"
             
-            Check existing content for overlap.
-            Generate a structured topic brief including:
-            - Title (compelling, keyword-optimized)
-            - Primary keyword
-            - Secondary keywords (3-5)
-            - Target audience
-            - Content angle
-            - Key points to cover (5-7)
-            - Recommended category`,
+            Check existing content for overlap and CLUSTER STATUS.
+            
+            If this topic is a "Support" post (deep dive), you MUST identify the "Parent Pillar" ID using queryBlogs.
+            
+            Generate a complete structured topic brief. 
+            
+            CRITICAL: Use exact camelCase field names as specified:
+            - primaryKeyword (not "primary keyword")
+            - secondaryKeywords (not "secondary keywords") 
+            - targetAudience (not "target audience")
+            - searchIntent (not "search intent")
+            - recommendedCategory (not "recommended category")
+            - contentAngle (not "content angle")
+            - suggestedWordCount (not "suggested word count")
+            - keyPoints (not "key points to cover")`,
+      {
+        structuredOutput: {
+          schema: topicBriefSchema,
+        },
+        maxSteps: 8,
+      },
     );
-    return { topic, topicBrief: result.text, dryRun };
+
+    // With structuredOutput, result.object contains the validated data
+    // We stringify it for downstream compatibility with existing text-based flow
+    const topicBrief = result.object
+      ? JSON.stringify(result.object, null, 2)
+      : result.text;
+
+    // Fallback error handling if still empty
+    if (!topicBrief || topicBrief === "null" || topicBrief === "{}") {
+      console.error(
+        "❌ [Workflow] Topic brief generation failed. Full result:",
+        JSON.stringify(result, null, 2),
+      );
+      throw new Error(
+        `Topic finder returned empty brief for topic: "${topic}". Check model configuration.`,
+      );
+    }
+
+    console.log("✅ [Workflow] Topic brief generated successfully");
+    return { topic, topicBrief, dryRun };
   },
 });
 
@@ -134,19 +304,60 @@ const researchStep = createStep({
   execute: async ({ inputData }) => {
     const { topic, topicBrief, dryRun } = inputData;
     console.log("🔬 [Workflow] Researching...");
+
+    // Parse topic brief to extract key points for focused research
+    let keyPoints: string[] = [];
+    try {
+      const parsed = JSON.parse(topicBrief);
+      keyPoints = parsed.keyPoints || [];
+    } catch {
+      // If parsing fails, continue without key points
+    }
+
     const result = await researcherAgent.generate(
-      `Research the following topic for a blog post:
-            
-            ${topicBrief}
-            
-            Gather:
-            - Key statistics with sources
-            - Expert insights
-            - Industry trends
-            - Common mistakes to address
-            - Unique angles`,
+      `Research the following topic for a blog post.
+      
+      TOPIC: ${topic}
+      
+      KEY POINTS TO RESEARCH:
+      ${keyPoints.map((p: string, i: number) => `${i + 1}. ${p}`).join("\n")}
+      
+      INSTRUCTIONS:
+      1. Use web-search to find recent statistics and data (2025-2026)
+      2. Use query-blogs to check what we've already covered
+      3. Gather key statistics WITH sources
+      4. Find expert insights and quotes
+      5. Identify industry trends
+      6. Note common mistakes to address
+      7. Find unique angles
+      
+      Return a comprehensive research brief.`,
+      {
+        maxSteps: 10,
+        structuredOutput: {
+          schema: researchBriefSchema,
+        },
+      },
     );
-    return { topic, topicBrief, researchBrief: result.text, dryRun };
+
+    // With structuredOutput, result.object contains the validated data
+    const researchBrief = result.object
+      ? JSON.stringify(result.object, null, 2)
+      : result.text;
+
+    // Validate we got something
+    if (!researchBrief || researchBrief === "null" || researchBrief === "{}") {
+      console.error(
+        "❌ [Workflow] Research failed. Full result:",
+        JSON.stringify(result, null, 2),
+      );
+      throw new Error(
+        `Researcher returned empty brief for topic: "${topic}". Check model configuration.`,
+      );
+    }
+
+    console.log("✅ [Workflow] Research completed successfully");
+    return { topic, topicBrief, researchBrief, dryRun };
   },
 });
 

@@ -36,13 +36,32 @@ STRATEGIC PILLARS (Use these to create/assign categories):
 - Career Wellness: Work-life balance, avoiding burnout, and job search mental health.
 - Resume & Application Excellence: High-impact document creation and optimization guides.
 
+TOPIC CLUSTER GOVERNANCE (CRITICAL):
+Every blog post must have a clear architectural role based on USER INTENT (not just keywords):
+
+1. PILLAR PAGE: A broad, comprehensive guide answering a "Macro Question" (e.g., "How do I master AI interviews?").
+   - Intent: Broad discovery / Education.
+   - Rule: Only ONE Pillar per major user intent.
+
+2. CLUSTER SUPPORT: A specific deep-dive answering a "Micro Question" (e.g., "Can AI detect if I am lying?").
+   - Intent: Specific troubleshooting / Comparison / Decision.
+   - Rule: MUST link back to the parent Pillar.
+
+YOUR DECISION LOGIC:
+1. Define the PRIMARY USER QUESTION for the new topic.
+2. Check existing content: Do we already have a Pillar answering this exact core question?
+3. IF YES: The new topic is "Cluster Support".
+   - You MUST identify the "Parent Pillar" ID from the database.
+   - Pivot the angle to be highly specific (e.g., "for Tech industry" or "vs Human Interviews").
+4. IF NO: This topic can be a new Pillar.
+
 WHEN GIVEN A TOPIC:
 1. Validate it's relevant to the broader career niche for ${currentYear}
-2. Check existing content for overlap using query-blogs tool to avoid cannibalization
-3. Suggest improvements or specific "angles" if a topic is too generic (e.g., pivot "AI jobs" to "How to prompt-engineer your way into a [Specific Industry] role")
+2. INTENT CHECK: Query existing content using query-blogs to find intent overlap.
+3. Suggest improvements or specific "angles" if a topic is too generic
 4. Define the target audience (e.g., Career Switchers, Gen Z graduates, Executive Leadership)
 5. Identify the primary keyword and 3-5 secondary keywords
-6. Recommend a category (create a new specific category if it doesn't fit existing ones using manage-categories tool)
+6. Recommend a category
 
 WHEN ASKED TO SUGGEST TOPICS:
 1. MULTI-CATEGORY DISCOVERY: Perform web searches across diverse queries:
@@ -59,6 +78,17 @@ WHEN ASKED TO SUGGEST TOPICS:
   output format:
   return a structured topic brief with:
   - title (compelling, keyword-optimized for ${currentYear})
+  - userIntent: {
+      primaryQuestion: string,
+      buyingStage: "awareness" | "consideration" | "decision",
+      userGoal: string
+    }
+  - clusterStrategy: {
+      role: "pillar" | "support",
+      isNewCluster: boolean,
+      parentPillarId: string | null (if support, provide the DB ID of the pillar),
+      parentPillarSlug: string | null (if support, provide the slug for linking)
+    }
   - primary keyword
   - secondary keywords (3-5)
   - target audience
@@ -68,11 +98,6 @@ WHEN ASKED TO SUGGEST TOPICS:
   - suggested word count (1500-2500)
   - key points to cover (5-7 bullet points)`,
   model: getModel("topicFinder"),
-  defaultOptions: {
-    modelSettings: {
-      temperature: 0.9,
-    },
-  },
   tools: {
     queryBlogs: queryBlogsTool,
     manageCategories: manageCategoriesToolTool,

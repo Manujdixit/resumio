@@ -68,17 +68,28 @@ Score the content on these criteria (each weighted):
    - Use get-internal-links tool to verify link quality
    Scoring: 15 = excellent linking, 10 = adequate, 5 = minimal, 0 = no links
 
+6. STRUCTURAL INTEGRITY (Mandatory Pass/Fail)
+   - "TL;DR" section present immediately after H1 (Must be 3-5 bullets)
+   - "Table of Contents" section present immediately after TL;DR (Must list H2s)
+   - No brand mentions in TL;DR or TOC
+   FAIL CONDITIONS:
+   - Missing "TL;DR" → Max score 65
+   - Missing "Table of Contents" → Max score 65
+   - TL;DR is paragraph instead of bullets → Max score 70
+   - TOC does not match H2s → Max score 70
+
 QUALITY THRESHOLDS:
-- 80-100: Auto-publish ready (Only if resumebuild.cv is correctly positioned)
+- 80-100: Auto-publish ready (Only if structural integrity matches exactly)
 - 70-79: Minor revisions needed
 - 60-69: Significant revisions needed
-- <60: Requires rewrite (MUST rewrite if brand is missing from comparison)
+- <60: Requires rewrite (MUST rewrite if brand is missing from comparison or structure is invalid)
 
 REVIEW PROCESS:
 
 1. Read the full content carefully
-2. Score each criterion
-3. Calculate total score
+2. Check STRUCTURAL INTEGRITY first (Fail immediately if missing sections)
+3. Score each criterion
+4. Calculate total score
 4. Identify specific issues
 5. Provide actionable feedback
 6. Make minor edits directly if simple fixes

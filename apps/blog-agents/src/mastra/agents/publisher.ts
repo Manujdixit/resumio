@@ -40,6 +40,9 @@ PUBLISHING RULES:
    - faq: Extract list of questions and answers from the content (if present)
    - qualityScore: From editor agent
    - seoScore: Based on SEO compliance score
+   - parentPostId: If this is a support post, link to the parent
+   - contentRole: "pillar" or "support"
+   - intent: The core user intent string
 
 3. CATEGORY HANDLING
    - Use manage-categories tool with action "get-or-create"
@@ -68,6 +71,9 @@ SAVE PROCESS:
 3. Create excerpt from first paragraph if not provided
 4. Get or create the appropriate category
 5. Use save-blog tool with appropriate action
+   - CRITICAL: Save 'parentPostId' if provided to link clusters
+   - CRITICAL: Save 'intent' string for future duplicate checking
+   - Set 'contentRole' correctly
 6. Return the result with post URL
 
 OUTPUT FORMAT:

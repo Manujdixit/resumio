@@ -39,6 +39,12 @@ export const queryBlogsTool = createTool({
       .default("published")
       .describe("Filter by post status"),
     categorySlug: z.string().optional().describe("Filter by category slug"),
+    searchIntent: z
+      .enum(["pillar", "support"])
+      .optional()
+      .describe(
+        "Filter by content role/intent. 'pillar' finds broad guides, 'support' finds specific deep-dives.",
+      ),
     similarityThreshold: z
       .number()
       .min(0)
@@ -60,6 +66,8 @@ export const queryBlogsTool = createTool({
         slug: z.string(),
         title: z.string(),
         excerpt: z.string().nullable(),
+        intent: z.string().nullable(),
+        contentRole: z.enum(["pillar", "support", "standalone"]).nullable(),
         categorySlug: z.string().nullable(),
         status: z.string(),
         publishedAt: z.string().nullable(),
@@ -74,10 +82,18 @@ export const queryBlogsTool = createTool({
       query: context.query,
       status: context.status,
       categorySlug: context.categorySlug,
+      searchIntent: context.searchIntent,
       similarityThreshold: context.similarityThreshold,
     });
 
-    const { query, status, categorySlug, similarityThreshold, limit } = context;
+    const {
+      query,
+      status,
+      categorySlug,
+      searchIntent,
+      similarityThreshold,
+      limit,
+    } = context;
 
     // Build conditions
     // biome-ignore lint/suspicious/noExplicitAny: Drizzle conditions can be complex
@@ -98,8 +114,16 @@ export const queryBlogsTool = createTool({
       }
     }
 
+    // Intent/Cluster Filter
+    if (searchIntent === "pillar") {
+      conditions.push(eq(schema.blogPost.contentRole, "pillar"));
+    } else if (searchIntent === "support") {
+      conditions.push(eq(schema.blogPost.contentRole, "support"));
+    }
+
     // Search query logic
-    let similarityColumn = sql<number>`0`;
+    // Default similarity to 1 (max distance / no match) to avoid false positives when query is undefined
+    let similarityColumn = sql<number>`1`;
     let orderByClause: SQL[] = [desc(schema.blogPost.publishedAt)];
 
     if (query) {
@@ -138,6 +162,8 @@ export const queryBlogsTool = createTool({
         slug: schema.blogPost.slug,
         title: schema.blogPost.title,
         excerpt: schema.blogPost.excerpt,
+        contentRole: schema.blogPost.contentRole,
+        intent: schema.blogPost.intent,
         status: schema.blogPost.status,
         publishedAt: schema.blogPost.publishedAt,
         wordCount: schema.blogPost.wordCount,
@@ -161,6 +187,8 @@ export const queryBlogsTool = createTool({
         slug: post.slug,
         title: post.title,
         excerpt: post.excerpt,
+        intent: post.intent,
+        contentRole: post.contentRole,
         categorySlug: post.categorySlug,
         status: post.status,
         publishedAt: post.publishedAt?.toISOString() ?? null,

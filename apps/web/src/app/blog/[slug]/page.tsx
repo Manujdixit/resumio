@@ -4,12 +4,15 @@ import type { Metadata, Route } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { MobileTOC } from "@/components/blog/MobileTOC";
+import { TableOfContents } from "@/components/blog/TableOfContents";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { createArticleSchema } from "@/lib/seo/schema/article";
 import { createBreadcrumbSchema } from "@/lib/seo/schema/breadcrumb";
 import { createFAQSchema } from "@/lib/seo/schema/faq";
+import { createHowToSchema } from "@/lib/seo/schema/how-to";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -117,9 +120,45 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   schemas.push(createBreadcrumbSchema(breadcrumbs));
 
+  // 4. HowTo Schema (Dynamic Extraction)
+  const isHowTo =
+    post.title.toLowerCase().startsWith("how to") ||
+    post.title.toLowerCase().startsWith("guide to") ||
+    post.intent?.includes("how-to");
+
+  if (isHowTo) {
+    // Extract steps from H2s in content
+    // Simple regex to find ## Heading
+    const steps = [];
+    const stepRegex = /^##\s+(.+)$/gm;
+    let match: RegExpExecArray | null;
+    // biome-ignore lint/suspicious/noAssignInExpressions: Regex exec loop pattern
+    while ((match = stepRegex.exec(post.content)) !== null) {
+      steps.push({
+        name: match[1].trim(),
+        text: match[1].trim(), // In a real parser we'd get the paragraph below
+        url: `https://www.resumebuild.cv/blog/${post.slug}#${match[1]
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")}`,
+      });
+    }
+
+    if (steps.length > 0) {
+      schemas.push(
+        createHowToSchema({
+          name: post.title,
+          description: post.excerpt || `Guide on ${post.title}`,
+          image: post.featuredImage || undefined,
+          url: `https://www.resumebuild.cv/blog/${post.slug}`,
+          steps: steps,
+        }),
+      );
+    }
+  }
+
   return (
     <>
-      <JsonLd data={schemas} />
+      <JsonLd data={schemas as any} />
       <div className="container mx-auto py-12">
         <div className="mb-12 space-y-4 text-center">
           <div className="flex items-center justify-center gap-2">
@@ -155,15 +194,33 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         <Separator className="my-8" />
 
-        <article className="prose prose-lg dark:prose-invert max-w-none">
-          <MDXRemote
-            source={post.content}
-            components={{
-              // Suppress H1s in content since the layout handles the main title
-              h1: () => null,
-            }}
-          />
-        </article>
+        <div className="relative grid grid-cols-1 gap-10 xl:grid-cols-[1fr_300px]">
+          <article className="prose prose-lg dark:prose-invert max-w-none">
+            <MDXRemote
+              source={post.content}
+              components={{
+                MobileTOC,
+                // Suppress H1s in content since the layout handles the main title
+                h1: () => null,
+                // Add IDs to H2s for TOC linking
+                h2: ({ children }) => {
+                  const id = children
+                    ?.toString()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-");
+                  return (
+                    <h2 id={id} className="scroll-m-20">
+                      {children}
+                    </h2>
+                  );
+                },
+              }}
+            />
+          </article>
+          <div className="hidden xl:block">
+            <TableOfContents content={post.content} />
+          </div>
+        </div>
 
         <Separator className="my-12" />
 
