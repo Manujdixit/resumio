@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     description: "Get your resume graded instantly",
     type: "website",
   },
+  alternates: {
+    canonical: "/tools/resume-scorer",
+  },
 };
 
 // FAQ data for resume scorer

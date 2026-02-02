@@ -17,6 +17,9 @@ export const metadata: Metadata = {
     description: "Scan your resume for ATS compatibility issues",
     type: "website",
   },
+  alternates: {
+    canonical: "/tools/ats-checker",
+  },
 };
 
 export default function ATSCheckerPage() {

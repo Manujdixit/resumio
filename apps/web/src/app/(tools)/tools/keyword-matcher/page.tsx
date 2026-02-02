@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     description: "See how well your resume matches any job description",
     type: "website",
   },
+  alternates: {
+    canonical: "/tools/keyword-matcher",
+  },
 };
 
 // FAQ data for keyword matcher
