@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   title: "Free Resume Tools | Resumio",
   description:
     "Boost your job search with our free resume tools. ATS checker, keyword matcher, cover letter generator, and more. No signup required.",
+  alternates: {
+    canonical: "/tools",
+  },
 };
 
 interface ToolCard {

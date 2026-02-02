@@ -34,6 +34,9 @@ export async function generateMetadata({
   return {
     title: `${category.name} | Blog`,
     description: category.description || `Articles about ${category.name}`,
+    alternates: {
+      canonical: `/blog/category/${category.slug}`,
+    },
   };
 }
 

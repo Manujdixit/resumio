@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     description: "Generate personalized cover letters with AI",
     type: "website",
   },
+  alternates: {
+    canonical: "/tools/cover-letter",
+  },
 };
 
 // FAQ data for cover letter generator

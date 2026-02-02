@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: "Career & Resume Blog | resumebuild.cv",
   description:
     "Expert advice on resume writing, job search strategies, and career development. Get the latest tips to land your dream job.",
+  alternates: {
+    canonical: "/blog",
+  },
 };
 
 export const revalidate = 3600;
