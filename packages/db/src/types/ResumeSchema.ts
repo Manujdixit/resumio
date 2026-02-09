@@ -46,6 +46,15 @@ const projectsSchema = z.array(
   }),
 );
 
+const achievementsSchema = z.array(
+  z.object({
+    id: z.string(),
+    title: z.string(),
+    description: z.array(z.string()),
+    date: z.string().optional(),
+  }),
+);
+
 export const ResumeSchema = z.object({
   personalInfo: personalInfoSchema.optional(),
   summary: summarySchema.optional(),
@@ -53,6 +62,7 @@ export const ResumeSchema = z.object({
   education: educationSchema.optional(),
   skills: skillsSchema.optional(),
   projects: projectsSchema.optional(),
+  achievements: achievementsSchema.optional(),
 });
 
 export type ResumeType = z.infer<typeof ResumeSchema>;

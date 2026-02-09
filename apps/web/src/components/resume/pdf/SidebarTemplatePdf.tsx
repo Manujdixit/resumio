@@ -312,6 +312,40 @@ export const SidebarTemplatePdf = ({ data }: { data: ResumeType }) => {
               ))}
             </View>
           )}
+
+          {/* Achievements */}
+          {data.achievements && data.achievements.length > 0 && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Achievements</Text>
+              {data.achievements.map((achievement, index) => (
+                <View
+                  key={achievement.id || `achievement-${index}`}
+                  style={{ marginBottom: 8 }}
+                >
+                  <View style={styles.itemHeader}>
+                    <View>
+                      <Text style={styles.itemTitle}>{achievement.title}</Text>
+                    </View>
+                    {achievement.date && (
+                      <Text style={styles.itemDate}>{achievement.date}</Text>
+                    )}
+                  </View>
+                  <View style={{ marginTop: 3 }}>
+                    {achievement.description.map((line, i) => (
+                      <View
+                        // biome-ignore lint/suspicious/noArrayIndexKey: lines don't have unique IDs
+                        key={`line-${i}`}
+                        style={styles.bulletPoint}
+                      >
+                        <Text style={styles.bulletDot}>•</Text>
+                        <Text style={styles.bulletContent}>{line}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
       </Page>
     </Document>
