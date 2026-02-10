@@ -86,7 +86,9 @@ export function JobTitlePageContent({ job }: Props) {
           )}
         </div>
 
-        <p className="mb-12 text-gray-600 text-lg leading-relaxed">{intro}</p>
+        <p className="mb-12 text-gray-600 text-lg leading-relaxed">
+          {job.description || intro}
+        </p>
 
         <section className="mb-12">
           <h2 className="mb-6 font-semibold text-2xl text-gray-900">
@@ -104,23 +106,43 @@ export function JobTitlePageContent({ job }: Props) {
           </div>
         </section>
 
+        {job.responsibilities && (
+          <section className="mb-12">
+            <h2 className="mb-6 font-semibold text-2xl text-gray-900">
+              Key Responsibilities
+            </h2>
+            <ul className="list-disc pl-5 text-gray-600">
+              {job.responsibilities.map((item) => (
+                <li key={item} className="mb-2">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <section className="mb-12">
           <h2 className="mb-6 font-semibold text-2xl text-gray-900">
             {job.title} Resume Guide
           </h2>
           <div className="prose prose-blue max-w-none text-gray-600">
             <h3>Professional Summary</h3>
-            <p>
-              Start with a compelling summary that highlights your years of
-              experience as a {job.title}
-              and your key achievements. Mention your industry expertise in{" "}
-              {industry?.name || "your field"}.
-            </p>
+            {job.summary ? (
+              <div className="rounded-lg border-blue-500 border-l-4 bg-gray-50 p-6 italic">
+                &ldquo;{job.summary}&rdquo;
+              </div>
+            ) : (
+              <p>
+                Start with a compelling summary that highlights your years of
+                experience as a {job.title} and your key achievements. Mention
+                your industry expertise in {industry?.name || "your field"}.
+              </p>
+            )}
             <h3>Work Experience</h3>
             <p>
               List your experience in reverse chronological order. Focus on
               achievements rather than duties. Use numbers to quantify your
-              impact (e.g., "Increased efficiency by 20%").
+              impact (e.g., &quot;Increased efficiency by 20%&quot;).
             </p>
           </div>
         </section>
