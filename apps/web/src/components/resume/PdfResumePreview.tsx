@@ -69,7 +69,10 @@ export default function PdfResumePreview() {
       );
     }
     // Small delay to show the refresh animation
-    setTimeout(() => setIsRefreshing(false), 500);
+    await updateInstance(
+      getPdfTemplate(selectedTemplate, resumeData.content as ResumeType),
+    );
+    setIsRefreshing(false);
   };
 
   const handleDownload = () => {
