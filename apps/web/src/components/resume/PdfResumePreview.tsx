@@ -1,6 +1,14 @@
 "use client";
 import { usePDF } from "@react-pdf/renderer";
-import { Download, Loader2, Minus, Plus, ZoomIn, ZoomOut } from "lucide-react";
+import {
+  Download,
+  Loader2,
+  Minus,
+  Plus,
+  RefreshCw,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -25,6 +33,7 @@ export default function PdfResumePreview() {
   const { resumeData, selectedTemplate } = useResumeStore();
   const [numPages, setNumPages] = useState<number>(0);
   const [scale, setScale] = useState<number>(0.8);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const pdfContainerRef = useRef<HTMLDivElement>(null);
 
   // PDF Generation Hook
@@ -51,6 +60,20 @@ export default function PdfResumePreview() {
 
   const handleZoomIn = () => setScale((prev) => Math.min(prev + 0.1, 2.0));
   const handleZoomOut = () => setScale((prev) => Math.max(prev - 0.1, 0.4));
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    if (resumeData?.content) {
+      await updateInstance(
+        getPdfTemplate(selectedTemplate, resumeData.content as ResumeType),
+      );
+    }
+    // Small delay to show the refresh animation
+    await updateInstance(
+      getPdfTemplate(selectedTemplate, resumeData.content as ResumeType),
+    );
+    setIsRefreshing(false);
+  };
 
   const handleDownload = () => {
     if (instance.url) {
@@ -106,6 +129,19 @@ export default function PdfResumePreview() {
             aria-label="Zoom in"
           >
             <Plus size={14} />
+          </button>
+          <div className="h-4 w-px bg-zinc-600" />
+          <button
+            type="button"
+            onClick={handleRefresh}
+            className="rounded p-1 text-zinc-400 hover:bg-zinc-700 hover:text-white disabled:opacity-50"
+            aria-label="Refresh PDF"
+            disabled={isRefreshing}
+          >
+            <RefreshCw
+              size={14}
+              className={isRefreshing ? "animate-spin" : ""}
+            />
           </button>
         </div>
 

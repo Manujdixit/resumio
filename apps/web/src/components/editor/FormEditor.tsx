@@ -10,6 +10,7 @@ import {
 } from "@/components/ai-elements/conversation";
 import { useUpdateResume } from "@/hooks/use-resumes";
 import { type ResumeType, useResumeStore } from "@/store/useResumeStore";
+import { AchievementsForm } from "./AchievementsForm";
 import { EducationForm } from "./EducationForm";
 import { ExperienceForm } from "./ExperienceForm";
 import { PersonalInfoForm } from "./PersonalInfoForm";
@@ -40,6 +41,9 @@ export function FormEditor({ resumeId }: FormEditorProps) {
   );
   const [localSkills, setLocalSkills] = useState(currentContent?.skills);
   const [localProjects, setLocalProjects] = useState(currentContent?.projects);
+  const [localAchievements, setLocalAchievements] = useState(
+    currentContent?.achievements,
+  );
 
   // Save states to track if sections have unsaved changes
   const [unsavedSections, setUnsavedSections] = useState<Set<string>>(
@@ -55,6 +59,7 @@ export function FormEditor({ resumeId }: FormEditorProps) {
       setLocalEducation(currentContent.education);
       setLocalSkills(currentContent.skills);
       setLocalProjects(currentContent.projects);
+      setLocalAchievements(currentContent.achievements);
       setUnsavedSections(new Set());
     }
   }, [currentContent]);
@@ -105,6 +110,13 @@ export function FormEditor({ resumeId }: FormEditorProps) {
     markUnsaved("projects");
   };
 
+  const handleAchievementsChange = (
+    achievements: ResumeType["achievements"],
+  ) => {
+    setLocalAchievements(achievements);
+    markUnsaved("achievements");
+  };
+
   // Save function that persists to database
   const saveSection = async (section: string, data: Partial<ResumeType>) => {
     try {
@@ -146,6 +158,8 @@ export function FormEditor({ resumeId }: FormEditorProps) {
   const saveSkills = () => saveSection("skills", { skills: localSkills });
   const saveProjects = () =>
     saveSection("projects", { projects: localProjects });
+  const saveAchievements = () =>
+    saveSection("achievements", { achievements: localAchievements });
 
   if (!currentContent) {
     return (
@@ -218,6 +232,14 @@ export function FormEditor({ resumeId }: FormEditorProps) {
               onChange={handleProjectsChange}
               onSave={saveProjects}
               hasUnsavedChanges={unsavedSections.has("projects")}
+              isSaving={updateResumeMutation.isPending}
+            />
+
+            <AchievementsForm
+              data={localAchievements}
+              onChange={handleAchievementsChange}
+              onSave={saveAchievements}
+              hasUnsavedChanges={unsavedSections.has("achievements")}
               isSaving={updateResumeMutation.isPending}
             />
           </div>

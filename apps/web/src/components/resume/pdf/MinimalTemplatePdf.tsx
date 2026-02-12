@@ -294,6 +294,40 @@ export const MinimalTemplatePdf = ({ data }: { data: ResumeType }) => {
           </View>
         )}
 
+        {/* Achievements */}
+        {data.achievements && data.achievements.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Achievements</Text>
+            {data.achievements.map((achievement, index) => (
+              <View
+                key={achievement.id || `achievement-${index}`}
+                style={{ marginBottom: 8 }}
+              >
+                <View style={styles.itemHeader}>
+                  <View style={styles.itemDateColumn}>
+                    {achievement.date && <Text>{achievement.date}</Text>}
+                  </View>
+                  <View style={styles.itemContentColumn}>
+                    <Text style={styles.itemTitle}>{achievement.title}</Text>
+                    <View style={{ marginTop: 4 }}>
+                      {achievement.description.map((line, i) => (
+                        <View
+                          // biome-ignore lint/suspicious/noArrayIndexKey: lines don't have unique IDs
+                          key={`line-${i}`}
+                          style={styles.bulletPoint}
+                        >
+                          <Text style={styles.bulletDot}>•</Text>
+                          <Text style={styles.bulletContent}>{line}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+
         {/* Skills */}
         {data.skills && data.skills.length > 0 && (
           <View style={styles.section}>
