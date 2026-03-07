@@ -62,13 +62,10 @@ export default function PdfResumePreview() {
   const handleZoomOut = () => setScale((prev) => Math.max(prev - 0.1, 0.4));
 
   const handleRefresh = async () => {
+    if (!resumeData?.content) return;
+
     setIsRefreshing(true);
-    if (resumeData?.content) {
-      await updateInstance(
-        getPdfTemplate(selectedTemplate, resumeData.content as ResumeType),
-      );
-    }
-    // Small delay to show the refresh animation
+    // Update the PDF instance to refresh the preview
     await updateInstance(
       getPdfTemplate(selectedTemplate, resumeData.content as ResumeType),
     );
