@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Barlow, Public_Sans } from "next/font/google";
 import "../index.css";
 import Providers from "@/components/providers";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -9,9 +9,14 @@ import {
   websiteSchema,
 } from "@/lib/seo-config";
 
-const manrope = Manrope({
-  variable: "--font-sans",
+const barlow = Barlow({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-barlow",
+});
+const publicSans = Public_Sans({
+  subsets: ["latin"],
+  variable: "--font-public-sans",
 });
 
 export const metadata: Metadata = {
@@ -87,7 +92,9 @@ export default function RootLayout({
       <head>
         <JsonLd data={[organizationSchema, websiteSchema]} />
       </head>
-      <body className={`${manrope.variable} font-sans antialiased`}>
+      <body
+        className={`${publicSans.variable} ${barlow.variable} font-sans antialiased`}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>

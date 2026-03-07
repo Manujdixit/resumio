@@ -23,6 +23,21 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "resumebuild.cv",
+          },
+        ],
+        destination: "https://www.resumebuild.cv/:path*",
+        permanent: true,
+      },
+    ];
+  },
   webpack: (config) => {
     config.resolve.alias.canvas = false;
     return config;

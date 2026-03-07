@@ -116,11 +116,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // Add competitor pages
+  // Assuming these are mostly static pages we can hardcode or map from our data
+  // Since we don't import competitors here yet, let's just hardcode the 3 we know exist
+  const competitorPages: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/alternatives/zety`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/alternatives/resume-io`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/alternatives/novoresume`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+  ];
+
   return [
     ...staticPages,
     ...industryPages,
     ...jobPages,
     ...blogPages,
     ...categoryPages,
+    ...competitorPages,
   ];
 }
