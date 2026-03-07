@@ -1,6 +1,7 @@
 import { db, schema } from "@resumio/db";
 import { desc, eq } from "drizzle-orm";
 import type { MetadataRoute } from "next";
+import { competitors } from "@/data/competitors";
 import { industries } from "@/data/industries";
 import { jobTitles } from "@/data/job-titles";
 
@@ -117,28 +118,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Add competitor pages
-  // Assuming these are mostly static pages we can hardcode or map from our data
-  // Since we don't import competitors here yet, let's just hardcode the 3 we know exist
-  const competitorPages: MetadataRoute.Sitemap = [
-    {
-      url: `${BASE_URL}/alternatives/zety`,
+  const competitorPages: MetadataRoute.Sitemap = competitors.map(
+    (competitor) => ({
+      url: `${BASE_URL}/alternatives/${competitor.slug}`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/alternatives/resume-io`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/alternatives/novoresume`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-  ];
+    }),
+  );
 
   return [
     ...staticPages,

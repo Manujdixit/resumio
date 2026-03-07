@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { competitors, getCompetitorBySlug } from "@/data/competitors";
+import { SITE_NAME, SITE_URL } from "@/lib/seo/constants";
+import {
+  generateCanonical,
+  generateDescription,
+  generateTitle,
+} from "@/lib/seo/metadata";
 import AlternativeClientPage from "./client-page";
 
 type Props = {
@@ -19,9 +25,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const title = generateTitle(
+    `Best ${competitorData.name} Alternative in 2026`,
+    SITE_NAME,
+  );
+  const description = generateDescription(
+    `Comparing ${competitorData.name} vs ${SITE_NAME}. Find out why job seekers are switching to the best ATS-optimized AI resume builder.`,
+  );
+  const canonical = generateCanonical(`/alternatives/${slug}`, SITE_URL);
+
   return {
-    title: `Best ${competitorData.name} Alternative in 2026 | resumebuild.cv`,
-    description: `Comparing ${competitorData.name} vs resumebuild.cv. Find out why job seekers are switching to the best ATS-optimized AI resume builder.`,
+    title,
+    description,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "website",
+    },
   };
 }
 
