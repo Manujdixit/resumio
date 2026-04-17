@@ -21,8 +21,6 @@ export const HeroNew: React.FC = () => {
         <div className="mx-auto mb-16 max-w-4xl text-center">
           <h1 className="mb-6 font-bold text-5xl text-gray-900 tracking-tight md:text-6xl lg:text-7xl">
             Build your resume
-            <br />
-            <span className="text-gray-900">instantly with AI</span>
           </h1>
           <p className="mx-auto mb-10 max-w-2xl text-gray-600 text-lg md:text-xl">
            Build ur resume now
