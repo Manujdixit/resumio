@@ -25,8 +25,7 @@ export const HeroNew: React.FC = () => {
             <span className="text-gray-900">instantly with AI</span>
           </h1>
           <p className="mx-auto mb-10 max-w-2xl text-gray-600 text-lg md:text-xl">
-            Create professional, ATS-optimized resumes in minutes. Our AI helps
-            you craft compelling content that gets you interviews.
+           Build ur resume now
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Link
