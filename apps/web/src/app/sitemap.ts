@@ -10,6 +10,12 @@ const BASE_URL = "https://www.resumebuild.cv";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     {
+      url: `${BASE_URL}/test`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 1.0,
+    },
+    {
       url: BASE_URL,
       lastModified: new Date(),
       changeFrequency: "daily",
