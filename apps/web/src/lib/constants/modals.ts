@@ -5,13 +5,13 @@ import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
  *
  * Configure via:
  * - NIM_API_KEY
- * - NIM_BASE_URL (optional; defaults to provider default)
- * - MODAL_NAME (model name, e.g. "meta/llama-3.1-70b-instruct")
+ * - NIM_BASE_URL (optional; defaults to https://integrate.api.nvidia.com/v1)
+ * - MODAL_NAME (model name, e.g. "deepseek-ai/deepseek-v4-flash")
  */
 const nim = createOpenAICompatible({
   name: "nim",
   apiKey: process.env.NIM_API_KEY ?? "",
-  baseURL: process.env.NIM_BASE_URL,
+  baseURL: process.env.NIM_BASE_URL ?? "https://integrate.api.nvidia.com/v1",
 });
 
 export const chatModel = nim.languageModel(process.env.MODAL_NAME as string);
