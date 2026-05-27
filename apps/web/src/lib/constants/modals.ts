@@ -1,17 +1,17 @@
-import { createGateway } from "ai";
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 
-// import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-
-const gateway = createGateway({
-  apiKey: process.env.AI_GATEWAY_API_KEY ?? "",
+/**
+ * NVIDIA NIM (OpenAI-compatible) language model for the website module.
+ *
+ * Configure via:
+ * - NIM_API_KEY
+ * - NIM_BASE_URL (optional; defaults to provider default)
+ * - MODAL_NAME (model name, e.g. "meta/llama-3.1-70b-instruct")
+ */
+const nim = createOpenAICompatible({
+  name: "nim",
+  apiKey: process.env.NIM_API_KEY ?? "",
+  baseURL: process.env.NIM_BASE_URL,
 });
 
-// const openrouter = createOpenRouter({
-//   apiKey: process.env.OPENROUTERKEY,
-// });
-
-// export const chatModel = openrouter.chat(process.env.MODAL_NAME as string);
-
-export const chatModel = gateway.languageModel(
-  process.env.MODAL_NAME as string,
-);
+export const chatModel = nim.languageModel(process.env.MODAL_NAME as string);
