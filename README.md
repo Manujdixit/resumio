@@ -44,6 +44,18 @@ bun run dev
 
 Open [http://localhost:3001](http://localhost:3001) in your browser to see your fullstack application.
 
+## Website AI Model Configuration (NVIDIA NIM)
+
+The website module (`apps/web`) uses NVIDIA NIM through the Vercel AI SDK OpenAI-compatible provider.
+
+Add these values to your `.env`:
+
+```bash
+NIM_API_KEY=your_nvidia_api_key
+NIM_BASE_URL=https://integrate.api.nvidia.com/v1
+MODAL_NAME=deepseek-ai/deepseek-v4-flash
+```
+
 ## Project Structure
 
 ```

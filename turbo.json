@@ -3,6 +3,8 @@
   "ui": "tui",
   "globalEnv": [
     "AI_GATEWAY_API_KEY",
+    "NIM_API_KEY",
+    "NIM_BASE_URL",
     "DATABASE_URL",
     "NODE_ENV",
     "BETTER_AUTH_SECRET",
